@@ -1,0 +1,28 @@
+.ico-word,
+.ico-text,
+.ico-strongword,
+.ico-strongpowerpoint,
+.ico-strongpdf,
+.ico-strongimage,
+.ico-strongexcel,
+.ico-powerpoint,
+.ico-pdf,
+.ico-image,
+.ico-excel,
+.ico-icon_xml,
+.ico-icon_txt,
+.ico-icon:link{background-image:url('/resources/images/filetypes.png');background-repeat:no-repeat}
+.ico-word{background-position:0px 0px;width:30px;height:30px;}
+.ico-text{background-position:-30px 0px;width:30px;height:30px;}
+.ico-strongword{background-position:0px -30px;width:30px;height:29px;}
+.ico-strongpowerpoint{background-position:-30px -30px;width:30px;height:29px;}
+.ico-strongpdf{background-position:-60px 0px;width:30px;height:29px;}
+.ico-strongimage{background-position:-60px -29px;width:30px;height:29px;}
+.ico-strongexcel{background-position:0px -59px;width:30px;height:29px;}
+.ico-powerpoint{background-position:-90px 0px;width:30px;height:30px;}
+.ico-pdf{background-position:-90px -30px;width:30px;height:30px;}
+.ico-image{background-position:0px -88px;width:30px;height:30px;}
+.ico-excel{background-position:-30px -88px;width:30px;height:30px;}
+.ico-icon_xml{background-position:-90px -60px;width:16px;height:16px;}
+.ico-icon_txt{background-position:-30px -59px;width:16px;height:16px;}
+.ico-icon:link{background-position:-46px -59px;width:16px;height:16px;}
