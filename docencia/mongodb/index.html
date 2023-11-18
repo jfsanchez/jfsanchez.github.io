@@ -1,0 +1,1572 @@
+<!doctype html>
+<html>
+    <head>
+	<!-- Recordatorio: Cambiar estas propiedades -->
+        <title>Intelixencia Artifical e Big Data</title>
+	<meta name="author" content="Jose Sánchez">
+	<meta property="emailuser" content="jfsanchez">
+	<meta property="emaildomain" content="edu.xunta.gal">
+	<meta property="creationdate" content="&copy; Febreiro 2023">
+	<!--meta property="documenturl" content="https://jfsanchez.es/"-->
+	<!-- --  -->
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="https://jfsanchez.es/cdn/resources/system/revealjs4/dist/reveal.css">
+        <!-link rel="stylesheet" href="https://jfsanchez.es/cdn/resources/system/revealjs4/dist/theme/simple.css"-->
+        <link rel="stylesheet" href="https://jfsanchez.es/cdn/resources/system/revealjs4/dist/theme/simple.css">
+        <style>
+            .reveal h1,.reveal h2,.reveal h3,.reveal h4{ 
+                --color: gold;
+                color: darkorange;
+            }
+            .trojo{ color: darkred; }
+            .tverde{ color: darkgreen; }
+            .tamarillo{ color: darkgoldenrod; }
+            .tazul{ color: darkblue; }
+            .famarillo { background-color: lightgoldenrodyellow; }
+            .divdual {
+                display:block;
+                float:left;
+                width: 48%;
+                margin: 0 auto;
+            }
+            .tnormal{
+                padding: 0;
+                text-align: justify;
+                font-size: 0.7em !important;
+            }
+            .pequeno {
+                font-size: 1.5rem;
+                line-height: 1rem;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+		            <p>MongoDB</p>
+                    <img src="imagenes/logo-mongodb.png" alt="Logo" class="r-stretch"/>
+                    <h5 style="color: darkgoldenrod">Big Data Aplicado</h5>
+       	            <h5 style="color: gray;">IA e BIG DATA</h5>
+                </section>
+
+                <section>
+			        <h1>Índice</h1>
+			        <p>Instalación con Vagrant</p>
+			        <p>Conceptos previos: NO-SQL, JSON, Key/Value...</p>
+			        <p>Facendo consultas con mongosh</p>
+                    <!-- Anotacións -->
+                    <aside class="notes">
+                        Que imos ver?
+                    </aside>
+                </section>
+
+                <section data-background-gradient="linear-gradient(to bottom, white, silver)">
+                    <h3>Instalación</h3>
+                    <ol class="r-fit-text">
+                    <li>Clonar (ou pull) repositorio: <a href="https://github.com/jfsanchez/SBD/">https://github.com/jfsanchez/SBD/</a></li>
+                    <li>Ir ao directorio: <span style="font-weight: bolder;">escenarios/mongodb</span></li>
+                    <li>Despregar co comando:</li>
+                    </ol>
+                    <pre><code>vagrant up</code></pre>
+                    <p class="r-fit-text"><strong>Máis información (comandos e explicacións):</strong><br/><small><a href="https://github.com/jfsanchez/SBD/tree/main/escenarios/mongodb">https://github.com/jfsanchez/SBD/tree/main/escenarios/mongodb</a></small></p>
+                    <aside class="notes"></aside>
+                </section>
+
+                <section>
+                    <section>
+                        <h1>Conceptos previos</h1>
+                        <h2>&dArr;</h2>
+                        <aside class="notes">Despregar para abaixo e seguir ata o final</aside>
+                    </section>
+
+                    <section>
+                        <iframe height="100%" width="100%" class="r-stretch" src="https://youtube.com/embed/RY_2gElt3SA?autoplay=1&controls=1&showinfo=0&autohide=1"></iframe>
+                    </section>
+
+                    <section>
+                        <h3>Conceptos previos</h3>
+                        <ul>
+                            <li>SQL</li>
+                            <li>No-SQL &mdash; Not Only SQL</li>
+                            <li>Clave-Valor</li>
+                            <li>Arquivo JSON: {} e []</li>
+                        </ul>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>SQL &mdash; Structured Query Language</h3>
+                        <small>Creado na década dos 70 por IBM. Dende entón tivo moitos dialectos: SQL-85/88/91, SQL:1999, SQL:2003, SQL:2006, SQL:2008, SQL:2011, SQL:2016...</small>
+                            <div class="r-stretch">
+                                <span style="font-weight: bolder; font-size: 2em; color: darkorange">A</span> tomicity<br/>
+                                <span style="font-weight: bolder; font-size: 2em; color: darkorange">C</span> onsistency<br/>
+                                <span style="font-weight: bolder; font-size: 2em; color: darkorange">I</span> solation<br/>
+                                <span style="font-weight: bolder; font-size: 2em; color: darkorange">D</span> urability
+                            </div>
+                        <aside class="notes">
+                            <p><b>Atomic</b> &mdash; Cada transacción ou se executa correctamente ou para o proceso e a BBDD volve ao seu estado anterior (antes do comenzo da transacción). Así aseguramos que todos os datos na BBDD son válidos (BEGIN TRANSACTION - ROLLBACK/COMMIT)</p>
+                            <p><b>Consistent</b> &mdash; Una transacción procesada nunca hará peligrar la integridad estructural de la base de datos (cumple retricciones).</p>
+                            <p><b>Isolated</b> &mdash; As transaccións non poden comprometer a integridade doutra transacción interactuando con ela mentres aínda estean en proceso.</p>
+                            <p><b>Durable</b> &mdash; Os datos relationados de unha transacción completada persistirán mesmo nos casos de perda de rede ou electricidade. Se unha transacción falla, non impactará sobre os datos manipulados.</p>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>No-SQL &mdash; Not Only SQL</h3>
+                        <div class="r-fit-text">
+                            <span style="font-weight: bolder; font-size: 2em; color: darkorange">B A S E</span> 
+                        </div>
+                        <p>Basically Available Soft State Eventually Consistent</p>
+                        <aside class="notes">
+                            <ul>
+                                <li><b>Basically Available</b> &mdash; Non buscan a consistencia inmediata, pero aseguraranse a dispoñibilidade dos datos difundindoos e replicandoos a través dos nodos do cluster de BBDD.</li>
+                                <li><b>Soft State</b> &mdash; Ao non ter unha consistencia inmediata, os datos poden mudar co tempo. Delégase parte desta consistencia ao programador.</li>
+                                <li><b>Eventually Consistent</b> &mdash; Finalmente consistente: Acada a consistencia ao final, sen embargo, ata que o fai, as lecturas fantasma pódense producir (os datos lidos poden estar nun estado que non reflicta a realidade)</li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>Escalados</h3>
+                        <h4 style="color:darkorange;">Habitualmente necesario en SQL</h4>
+                        <p><strong>Scale up</strong> &mdash; Escalado vertical &mdash; Mellorar a máquina</p>
+                        <h4 style="color:darkorange;">Habitualmente en NO-SQL</h4>
+                        <p><strong>Scale out</strong> &mdash; Escalado horizontal &mdash; Meter máquinas</p>
+                        <aside class="notes">
+                            Hoxe en día hai excepcións e non é 100% certo.
+                        </aside>
+                    </section>
+                   
+                    <section>
+                        <h3>Características NO-SQL</h3>
+                            <ul>
+                                <li>Flexibles</li>
+                                <li>Non-Relacionales</li>
+                                <li>Distribuídos</li>
+                                <li>Escalables</li>
+                                <li>Con capacidade de particionamento (Partition-Tolerant)</li>
+                                <li>Altamente dispoñibles</li>
+                            </ul>
+                        <aside class="notes">
+                            <ul>
+                                <li><b>Flexibles</b> &mdash; Non obrigan a un esquema, polo que permiten un desenvolvemente das aplicacións máis rápido e máis iterativo.</li>
+                                <li><b>Non-Relacionales</b> &mdash; As BBDD relacionales escalan de maneira vertical. É dicir, debemos ampliar CPU, RAM, HDD na mesma máquina (caro e ten un límite).</li>
+                                <li><b>Distribuídos</b> &mdash; Pódense executar en diferentes clústeres ou conxuntos de máquinas distribuídas polo mundo. Poden servir datos para aplicacións en todo o mundo.</li>
+                                <li><b>Escalables</b> &mdash; Gardan e consultan datos en contínuo cambio e soportan un alto nivel de transaccións. Deben soportar escalado horizontal (máis máquinas baratas para ampliar a capacidade).</li>
+                                <li><b>Partition Tolerant</b> &mdash; Capaces de funcionar con datos en celdas separadas.</li>
+                                <li><b>Highly Available</b> &mdash; Deben ser capaces de seguir servindo datos incluso cando algúns dos nodos estean caídos. Isto é posible grazas á replicación de datos.</li>
+                            </ul>
+                            El concepto NO-SQL empezó a usarse en 1960, es anterior a SQL.
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>Teorema de CAP (Conxetura de Brewer)</h3>
+                        <ul>
+                            <li><span style="font-weight: bolder; color: darkorange;">Consistency</span> &mdash; Calquer lectura debe recibir como resposta a escritura máis recente ou un erro.</li>
+                            <li><span style="font-weight: bolder; color: darkorange;">Availability</span> &mdash; Calquer petición recibe alomenos unha resposta non errónea (sen garantía da escritura máis recente).</li>
+                            <li><span style="font-weight: bolder; color: darkorange;">Partition Tolerance</span> &mdash; O sistema segue funcionando de retrasarse ou descartarse mensaxes entre nodos da rede.</li>
+                        </ul>
+                        <p style="font-weight: bolder;">Sólo dous de tres</p>
+                        <aside class="notes">
+                            <p>Comenzou sendo unha conxetura proposta por Eric Brewer (da Universidade de Berkely) no 2000, no simposio de principios de computación distribuida (PODC).</p>
+                            <p>No 2002, Seth Gilbert e Nancy Linch (MIT) presentaron unha demostración convirtindo esta conxetura en teorema</p>
+                            <p>Vídeo relacionado: <a href="https://www.youtube.com/watch?v=RY_2gElt3SA&list=PL5ZXG50fTM7oZBZmFhJygA2419Hsg6v8H&index=5">The basics: Why Computers Can't Count Sometimes (Tom Scott)</a></p>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>C&amp;P (Consistency &amp; Partition Tolerance)</h3>
+                        <ul>
+                            <li>MongoDB</li>
+                            <li>Kafka</li>
+                        </ul>
+                        <h3>A&amp;P (Availability &amp; Partition Tolerance)</h3>
+                        <ul>
+                            <li>Apache Cassandra</li>
+                        </ul>
+                        <aside class="notes">
+
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>Clave-Valor</h3>
+                        <p>Tamén chamados arrays asociativos</p>
+                        <img src="imagenes/clave-valor.png" alt="Wikipedia: Exemplo Clave-Valor" class="r-stretch"/>
+                        <aside class="notes">
+                            Wikipedia: Los diccionarios contienen una colección de objetos, o registros, que a su vez tienen muchos campos diferentes dentro de ellos, cada uno de los cuales contiene datos. Estos registros se almacenan y se recuperan utilizando una clave que identifica de manera única el registro y se utiliza para encontrar rápidamente los datos dentro de la base de datos. 
+                            https://es.wikipedia.org/wiki/Base_de_datos_clave-valor
+                            Ollo ("arreglos" refírese a arrays, na miña opinión unha traducción moi desafortunada, aínda que bastante usada en países de Latinoamérica)
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>JSON</h3>
+                        <p>JavaScript Object Notation</p>
+                        <pre><code data-trim data-noescape class="JSON">
+                            {
+                                nome: 'Juan', 
+                                apelidos: 'S&aacute;nchez',
+                                idade: 19,
+                                titor: {
+                                    nome: 'Jose S&aacute;nchez', 
+                                    email: 'jose@local'
+                                }, 
+                                modulos: [
+                                    'Big Data Aplicado',
+                                    'Sistemas de Big Data',
+                                    ]
+                            }
+                        </code></pre>
+                        MongoDB manexa documentos <span class="tazul" style="font-weight: bolder;">BSON</span> (JSON en formato binario).
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Organización en MongoDB</h3>
+                        <img class="r-stretch" src="imagenes/organizacion-mongodb.png" alt="Organización de MongoDB"/>
+                        <aside class="notes">
+                            <p><strong>Imaxe da organización de MongoDB.</strong></p>
+                            <p>Un servidor mongod pode ter unha ou máis bases de datos, dentro delas terá coleccións de datos.</p>
+                            <p>Cada colección pode ter documentos (JSON).</p>
+                            <p>Un documento JSON pode ter varios rexistros tipo clave-valor ou clave-tupla valores.</p>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>Outros tipos de BBDD NO-SQL</h3>
+                        <ul>
+                            <li>BBDD columnares son útiles para gran volume de datos (Y-column).</li>
+                            <li>Rápidas en lecturas, máis lentas en escritura.</li>
+                        </ul>
+                        <ul>
+                            <li>Amazon Redshift</li>
+                            <li>MariaDB &mdash; ColumnStore</li>
+                            <li>SAP HANA</li>
+                            <li>MonetDB</li>
+                            <li>Apache Cassandra</li>
+                            <li>Redis</li>
+                            <li>DynamoDB</li>
+                        </ul>
+                        <aside class="notes">
+
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>Apache Cassandra</h3>
+                        <img src="imagenes/cassandra-tipos-bbdd.png" alt="Tipos de BBDD en Apache Cassandra" class="r-stretch"/>
+                    </section>
+
+                    <section>
+                        <h3>Conceptos previos &mdash; Mundo relacional</h3>
+                        <p style="color: darkorange;">Non hai traducción directa correcta.</p>
+                        <p>Asumamos esta <strong>mentira</strong> para entendernos:</p>
+                        <ul>
+                            <li>Bases de datos &rArr; Bases de Datos</li>
+                            <li>Coleccións &rArr; Táboas</li>
+                            <li>Claves &rArr; Columnas/Atributos</li>
+                            <li>Tuplas &rArr; ~"Documentos"</li>
+                        </ul>
+                    </section>
+                    <aside class="notes"></aside>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Conexión, Coleccións e Bases de Datos</h2>
+                        <h2>&dArr;</h2>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>MongoSH &mdash; Conexión</h3>
+                        <h4>Conectar a localhost</h4>
+                        <pre><code class="bash" data-trim data-noescape>vagrant@ubuntu-focal:~$ mongosh [--host localhost]</code></pre>
+                        <h4>Saír de mongosh</h4>
+                        <pre><code class="SQL" data-trim data-noescape>test&gt; quit</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>MongoSH &mdash; Bases de Datos</h3>
+                        <h4>Seleccionar a base de datos database1</h4>
+                        <pre><code class="SQL" data-trim data-noescape>test&gt; use database1</code></pre>
+                        <h4>Indicar a base de datos actual</h4>
+                        <pre><code class="SQL" data-trim data-noescape>database1&gt; db</code></pre>
+                        <h4>Amosar as bases de datos</h4>
+                        <pre><code class="SQL" data-trim data-noescape>database1&gt; show dbs</code></pre>
+                        <h4>Borrar BBDD actual</h4>
+                        <pre><code class="SQL" data-trim data-noescape>database1&gt; db.dropDatabase()</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Creación explícita</h3>
+                        <h4>Crear colección</h4>
+                        <pre><code class="SQL" data-trim data-noescape>database1&gt; db.createCollection("laColeccionEjemplo")</code></pre>
+                        <h4>Ver as coleccións</h4>
+                        <pre><code class="SQL" data-trim data-noescape>database1&gt; show collections</code></pre>
+                        <h4>Borrar a coleción</h4>
+                        <pre><code class="SQL" data-trim data-noescape>database1&gt; db.laColeccionEjemplo.drop()</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Creación implícita</h3>
+                        <pre><code class="SQL" data-trim data-noescape>
+                            test&gt; use holamundo
+                            holamundo&gt; db.holamundo.insert({'hola': 'mundo'})
+                            holamundo&gt; show collections
+                            holamundo&gt; show databases
+                        </code></pre>
+                        <p>Unha base de datos e unha colección créanse automáticamente ao crear un documento</p>
+                        <aside class="notes"></aside>
+                    </section>
+                </section>
+
+                <section  data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                    <h2>Operacións CRUD &rArr;</h2>
+                    <aside class="notes"></aside>
+                </section>
+
+                <section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                        <h1 class="r-fit-text">Inserción / INSERT</h1>
+                        <h2>&dArr;</h2>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Inserción de rexistros (INSERT)</h3>
+                        <pre><code data-trim data-noescape>
+                        db.estudantes.insertOne( {
+                            nome: 'Juan', 
+                            apelidos: 'Sánchez',
+                            idade: 19,
+                            titor: 'Jose Sánchez', 
+                            modulos: ['Big Data Aplicado', 'Sistemas de Big Data']
+	                    })
+                        </code></pre>
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.countDocuments()
+                        </code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>INSERT (múltiple)</h3>
+                        <pre><code data-trim data-noescape>
+                        db.estudantes.insertMany([
+                            {...},
+                            {...}
+                        ])
+                        </code></pre>
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.countDocuments()
+                        </code></pre>
+                        <a href="imagenes/exemplo-mongodb-estudantes.txt" target="_blank">Baixa aquí o exemplo con unha e varias insercións</a>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h3>Exercicio</h3>
+                        <small>Inserta un documento na colección &quot;docentes&quot;. Mete os dous titores cos nomes que aparecen anteriormente e correo o nome @local.</small>
+                        <pre class="fragment"><code data-trim data-noescape>
+                            db.docentes.insertMany( [
+                                {nome: "Jose Sánchez", email: 'jose@local'},
+                                {nome: "Juan Torre", email: 'juan@local'} ])
+                        </code></pre>
+                    </section>
+                </section>
+                
+                <section>
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                        <h1>Busca de rexistros</h1>
+                        <h2>&dArr;</h2>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Busca de rexistros</h3>
+                        A busca máis simple, que devolve todo é:
+                        <pre><code class="SQL" data-trim data-noescape>
+                            db.estudantes.find()
+                        </code></pre>
+                        ou
+                        <pre><code class="SQL" data-trim data-noescape>
+                            db.estudantes.find({})
+                        </code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>_id: ObjectId(&quot;123456789abc&quot;)</h3>
+                        <p>É un campo composto por 12 bytes:</p>
+                        <ul>
+                            <li><span style="font-weight: bolder;">4 bytes</span>: Timestamp (UNIX EPOCH).</li>
+                            <li><span style="font-weight: bolder;">3 bytes</span>: Identificador único da máquina.</li>
+                            <li><span style="font-weight: bolder;">2 bytes</span>: Identificador do proceso.</li>
+                            <li><span style="font-weight: bolder;">3 bytes</span>: Campo incremental.</li>
+                        </ul>
+                        <p><strong>Ademáis:</strong></p>
+                        <ul>
+                            <li><strong>Obrigatorio</strong>: Se non existe, créase.</li>
+                            <li><strong>Único.</strong></li>
+                        </ul>
+                        <aside class="notes">
+                            <p>Cada segundo poderíamos xerar: 2<sup>3*8</sup>=2<sup>24</sup>=16.777.216 documentos.</p>
+                            <p>Técnicamente un id pode repetirse, pero é algo moi raro</p>
+                            <p>Da a orde de creación dos documentos (e a súa data)</p>
+                            <p>O tamaño máximo dun documento é de 16MB</p>
+                            <a href="https://www.mongodb.com/docs/manual/reference/method/ObjectId/">ObjectID Manual MongoDB</a>
+                            <p>Na nova versión do manual xuntan ous 3 bytes da máquina e os 2 bytes do proceso coma 5 bytes aleatorios que identifican máquina e proceso</p>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>Límites</h3>
+                        Esta liña devolve todas as tuplas
+                        <pre><code data-trim data-noescape>covid&gt; db.coviditalia.find({})</code></pre>
+                        Pódense limitar o número a amosar
+                        <pre><code data-trim data-noescape>covid&gt; db.coviditalia.find({}).limit(3)</code></pre>
+                        <p>Por defecto mongosh limita a 20 e podemos pedir mais co comando <strong>it</strong> (iterar).</p>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Ordeamento de documentos</h3>
+                        <pre><code data-trim data-noescape>
+                            covid&gt; db.coviditalia.find().sort({data:1})
+                            covid&gt; db.coviditalia.find().sort({data:-1})
+                        </code></pre>
+                        <ul>
+                            <li>1 indica de menor a maior (&lt; &rArr; &gt;).</li>
+                            <li>-1 de maior a menor (&gt; &rArr; &lt;).</li>
+                        </ul>
+                    </section>
+                    
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h3>Exercicio</h3>
+                        Coa colección alumnado, busca tódolos estudantes e ordenaos por idade (ascendente e descendentemente).
+                        <div class="fragment">
+                            <h4>Ascendente</h4>
+                            <pre><code data-trim data-noescape>
+                                db.estudantes.find().sort({idade: 1})
+                            </code></pre>
+                        </div>
+                        <div class="fragment">
+                            <h4>Descendente</h4>
+                            <pre><code data-trim data-noescape>
+                            db.estudantes.find().sort({idade:-1})
+                            </code></pre>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3>Proxeccións</h3>
+                        <p>Útiles para obter só algúns atributos.</p>
+                        <h4>Opción 1: Amosar</h4>
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.find( {}, 
+                                {nome: 1, 
+                                apelidos: 1, 
+                                idade: 1, 
+                                titor: 1})
+                        </code></pre>
+                        <h4>Opción 2: Ocultar</h4>
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.find({}, {modulos: 0})
+                        </code></pre>
+                        Fan o mesmo?
+                    </section>
+
+                    <section>
+                        <h3>Filtrado</h3>
+                        <ul>
+                            <li>A operación find pode recibir dous parámetros:</li>
+                            <li style="list-style: none"><ul><li>db.coleción.find( <span style="color: darkred; font-weight: bolder;">{filtro}</span>, 
+                                <span style="color: darkgreen; font-weight: bolder;">{proxección}</span> )</li></ul></li>
+                            <li>No filtro podemos especificar varias condicións:</li>
+                            <li style="list-style: none"><ul>
+                                <li>Coincidencia exacta: <pre><code>db.estudantes.find({idade:19})</code></pre></li>
+                                <li>Operador de filtrado: <pre><code>db.estudantes.find( {idade: {$lte: 19} } )</code></pre></li>
+                            </ul></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Filtrado: $in</h3>
+                        Todos os documentos nos que un campo é igual a unha das opcións.
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.find({ titor: 
+                                {$in : ["Jose Sánchez", "Juan Torre"] } })
+                        </code></pre>
+                    </section>
+                    
+                    <section>
+                        <h3>Filtrado en arrays</h3>
+                        <p>Tamén podemos querer filtrar por un elemento dun array, para iso empregamos .X (onde X é un índice que comeza en 0)</p>
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.find( 
+                                {"modulos.0": "Sistemas de Big Data"}).pretty()
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Filtrado en arrays: $elemMatch</h3>
+                        <h4>Que conteña o módulo (exacto) sexa ou non array</h4>
+                        <pre><code data-trim data-noescape>
+                        db.estudantes.find({modulos: 'Sistemas de Aprendizaxe'})
+                        </code></pre>
+                        <h4>Que sexa array (ou subdocumento) e teña o elemento</h4>
+                        <pre><code data-trim data-noescape>
+                        db.estudantes.find({modulos: 
+                            {$elemMatch: {$eq: 'Sistemas de Aprendizaxe'}}})
+                        </code>
+                        $elemMatch admite varias condicións
+                        </pre>
+                    </section>
+
+                    <section>
+                        <h3>Filtrado en arrays: $all</h3>
+                        <pre><code data-trim data-noescape>
+                            { <field>: { $all: [ <value1> , <value2> ... ] } }
+                        </code>O array debe ter todos os elementos</pre>
+                        <h4>Exemplo:</h4>
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.find({modulos : {$all: ['Sistemas de Big Data',
+                            'Big Data Aplicado',
+                            'Modelos de Intelixencia Artificial',
+                            'Programación de Intelixencia Artificial',
+                            'Sistemas de Aprendizaxe'] }})
+                        </code></pre>
+
+                    </section>
+
+                    <section>
+                        <h3>Operadores para filtrado</h3>
+                        <table>
+                            <thead><tr><th>Operador</th><th>Sintaxe</th></tr></thead>
+                            <tbody>
+                            <tr>
+                                <td><span style="font-weight: bolder;">Igual</span></td>
+                                <td><code>{<span style="color:red">clave1:</span> '<span style="color: darkgreen;font-style: italic">valor1</span>'}</code></td>
+                            </tr><tr>
+                                <td><span style="font-weight: bolder;">Menor</span></td>
+                                <td><code>{<span style="color:red">clave1:</span> {<span style="color: blue; font-weight: bolder;">$lt</span>: <span style="color: darkgreen;font-style: italic">123.45</span>} }</code></td>
+                            </tr><tr>
+                                <td><span style="font-weight: bolder;">Menor igual</span></td>
+                                <td><code>{<span style="color:red">clav</span>: {<span style="color: blue; font-weight: bolder;">$lte</span>: <span style="color: darkgreen;font-style: italic">123.45</span>} }</code></td>
+                            </tr><tr>
+                                <td><span style="font-weight: bolder;">Maior</span></td>
+                                <td><code>{<span style="color:red">clav</span>: {<span style="color: blue; font-weight: bolder;">$gt</span>: <span style="color: darkgreen;font-style: italic">123.45</span>} }</code></td>
+                            </tr><tr>
+                                <td><span style="font-weight: bolder;">Maior igual</span></td>
+                                <td><code>{<span style="color:red">clav</span>: {<span style="color: blue; font-weight: bolder;">$gte</span>: <span style="color: darkgreen;font-style: italic">123.45</span>} }</code></td>
+                            </tr><tr>
+                                <td><span style="font-weight: bolder;">Distinto</span></td>
+                                <td><code>{<span style="color:red">clav</span>: {<span style="color: blue; font-weight: bolder;">$ne</span>: <span style="color: darkgreen;font-style: italic">123.45</span>} }</code></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Operadores lóxicos</h3>
+                        <h4>AND</h4>
+                            <pre><code data-trim data-noescape>{ {key1: 'value1', key2: 'value2'} }</code></pre>
+                        <h4>OR</h4>
+                        <pre><code data-trim data-noescape>
+                        {
+                            $or: [
+                                {key1: 'value1'}, {key2: 'value2'}
+                            ]
+                        }</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Composición de operadores</h3>
+                        <h4>Exemplo AND+OR</h4>
+                        <pre><code data-trim data-noescape>
+                        {
+                            atributo1: 'valor1',
+                            $or: [
+                                {atributo2: 'valor2'}, {atributo3: {$gte: valor3} }
+                            ]
+                        }</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Contando documentos</h3>
+                        <h4 style="font-weight: bolder;">Opción 1: Cunha query</h4>
+                        <pre><code data-trim data-noescape>db.estudantes.countDocuments({QUERY}, {opcións})</code></pre>
+                        <h4 style="font-weight: bolder;">Opción 2: Empregando os metadatos</h4>
+                        <pre><code data-trim data-noescape>db.estudantes.estimatedDocumentCount()</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Contando documentos con countDocuments</h3>
+                        <pre><code data-trim data-noescape>db.estudantes.countDocuments({idade: 19}, {opcións})</code></pre>
+                        Opcións (opcionais):
+                        <ul>
+                        <li><b>limit</b>: Cantos documentos contar como máximo.</li>
+                        <li><b>skip</b>: Cantos documentos saltar antes de comezar a conta.</li>
+                        <li><b>hint</b>: Un índice ou a súa especificación para acelerar a conta.</li>
+                        <li><b>maxTimeMS</b>: Máximo tempo en miliseugndos para a operación de conta.</li>
+                        </ul>
+                    </section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h4><b>Exercicio 1</b>: Filtra os estudantes que sexan do titor Jose Sánchez e teñan máis de 20 anos</h4>
+                        <pre class="fragment"><code data-trim data-noescape>db.estudantes.find( {titor: "Jose Sánchez", idade: {$gt: 20}})</code></pre>
+                        <h4 class="fragment"><b>Exercicio 2</b>: Filtra os estudantes que sexan do titor Juan Torre e teñan menos de 21 anos</h4>
+                        <pre class="fragment"><code data-trim data-noescape>db.estudantes.find( {titor: "Juan Torre", idade: {$lt: 21}})</code></pre>
+                        <h4 class="fragment"><b>Exercicio 3</b>: Filtra os estudantes que sexan do titor Jose Sánchez ou teñan 23 anos ou máis anos</h4>
+                        <pre class="fragment"><code data-trim data-noescape>
+                            db.estudantes.find( {
+                                $or: [
+                                    {titor: "Jose Sánchez"}, {idade: {$gte: 23}}] })
+                        </code></pre>
+                    </section>
+            </section>
+
+            <section>
+                <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                    <h1>Actualización (UDPATE)</h1>
+                    <h2>&dArr;</h2>
+                    <aside class="notes"></aside>
+                </section>
+
+                <section>
+                    <h3>updateOne</h3>
+                    <pre><code data-trim data-noescape>db.estudantes.updateOne(filtro, actualizacion, opcións)</code></pre>
+                    <aside class="notes"></aside>
+                </section>
+                <section>
+                    <h3>Operador $set</h3>
+                    <pre><code data-trim data-noescape>{$set: {...} }</code>
+                    Muda ou engade valores</pre>
+                    <h4>Exemplo $set: Engadir curso actual</h4>
+                    <pre><code data-trim data-noescape>
+                        db.estudantes.updateOne({nome: 'Luis'},
+                            {$set: {'Curso': '2022/2023'}})
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Operador $push</h3>
+                    <pre><code data-trim data-noescape>{$push: {...} }</code>
+                    Engade un elemento a un array (ou crea o array co elemento)</pre>
+                    <h4>Exemplo $push: Engadir un módulo</h4>
+                    <pre><code data-trim data-noescape>
+                        db.estudantes.updateMany({nome: 'Luis'}, 
+                            {$push: {'modulos': 'FOL'}})
+                    </code></pre>
+                    <aside class="notes">
+                        Outros operadores: `$set`, `$push`, `$pop`, `$unset`, `$inc`.
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>pop</h3>
+                    <p class="pequeno">Quita un elemento dun array por posición</p>
+                    <pre><code data-trim data-noescape>
+                        db.estudantes.updateMany( { },
+                            { $pop: { modulos: 1 } }) 
+                    </code></pre>
+                    <ul>
+                        <li>1 &rArr; O último elemento do array.</li>
+                        <li>-1 &rArr; O primeiro elemento do array.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>pull</h3>
+                    <p class="pequeno">Borra dun array tódolos valores que cumplen unha condición.</p>
+                    <h4>Sintaxe</h4>
+                    <pre><code data-trim data-noescape>
+                        { $pull: { campo1: <valor|condición>,
+                             campo2: <valor|condición>, ... } }
+                    </code></pre>
+                    <h4>Exemplo</h4>
+                    <pre>Borra &quot;FOL&quot; e &quot;Matemáticas&quot; dos módulos.<br/>Quita &quot;Titor de proba&quot; do array (se hai) de titores legais.<code data-trim data-noescape>
+                        db.estudantes.updateMany(
+                            { },
+                            { $pull: { modulos: { 
+                                $in: [ "FOL", "Matemáticas" ] },
+                             titores_legais: "Titor de proba" } }
+                        )
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>unset</h3>
+                    <p class="pequeno">Quita un campo dos documentos.</p>
+                    <pre><code data-trim data-noescape>
+                        db.estudantes.updateMany(
+                            { },
+                            { $unset: { curso_academico: "" } }
+                        )
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Opción: upsert</h3>
+                    Inserta un documento cos datos se non atopa un.
+                    <pre><code class="SQL" data-trim data-noescape>db.estudantes.updateOne(
+                        {nome: 'Alumno de Proba'}, 
+                        {$set: {email: 'noreply@local'}}, 
+                        {upsert:true} )</code></pre>
+                    <aside class="notes">
+                        <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/">updateMany</a>
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>findAndModify()</h3>
+                    
+                    <p class="pequeno">Evita a Race Condition típica. Actualiza e devolve o rexistro</p>
+                    <pre>Sumar un caso de COVID<code data-trim data-noescape>
+                    use covid
+                    db.coviditalia.findAndModify({
+                        query: {
+                        data: '2020-02-24T18:00:00',
+                        stato: 'ITA',
+                        codice_regione: 13,
+                        denominazione_regione: 'Abruzzo',
+                        codice_provincia: 66,
+                        denominazione_provincia: "L'Aquila",
+                        sigla_provincia: 'AQ',},
+                        update: {$inc: {totale_casi: 1}},
+                        create:true})
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>updateMany()</h3>
+                    <pre><code data-trim data-noescape>
+                        use alumnado
+                        db.estudantes.updateMany({},
+                            {$set: {'curso_academico': '2022/2023'}})
+                    </code></pre>
+                    <ul>
+                        <li>Se updateMany falla, debemos executalo de novo para que acabe porque non desfai os cambios (rollback).</li>
+                        <li>Non cumpre o principio de illamento (os cambios son visibles a medida que se actualizan)</li>
+                    </ul>
+                    <aside class="notes">
+                        <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateMany/">updateMany</a>
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Cambiando documentos de sitio</h3>
+                    <pre><code data-trim data-noescape>
+                        db.colecion.replaceOne(filtro, reemplazo, opcións)
+                    </code>Útil xa que mantén o mesmo _id mudando o resto de datos dunha vez</pre>
+                </section>
+
+            </section>
+
+            <section>
+                <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                    <h1>Borrado (DELETE)</h1>
+                    <h2>&dArr;</h2>
+                    <aside class="notes"></aside>
+                </section>
+                
+                <section>
+                    <h3>Borrado (DELETE)</h3>
+                    <pre><code data-trim data-noescape>
+                        db.coleccion.deleteOne/deleteMany(filtro, opcións)
+                        db.collection.findOneAndDelete()
+                        db.collection.bulkWrite()
+                    </code></pre>
+                    <aside class="notes"></aside>
+                </section>
+
+                <section>
+                    <h3>deleteOne()</h3>
+                    <pre><code data-trim data-noescape>
+                        db.estudantes.deleteOne({nome: 'Luis'})
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>deleteMany()</h3>
+                    <pre><code data-trim data-noescape>
+                        db.estudantes.deleteOne({curso_academico: '2021/2022'})
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                    <h1>Aggregate (&quot;JOIN&quot;)</h1>
+                    <h2>&dArr;</h2>
+                    <aside class="notes"></aside>
+                </section>
+                
+                <section>
+                    <h3>Consultas con aggregate</h3>
+                    <p>A través dunha serie de procesos conectados entre si (agregation pipeline) os datos poden pasar por operacións (unha cada vez) que:</p>
+                    <ul>
+                        <li>Filtren</li>
+                        <li>Ordeen</li>
+                        <li>Agrupen</li>
+                        <li>Transformen</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Sintaxe aggregate()</h3>
+                    <pre><code data-trim data-noescape class="JSON">
+                    db-colecion.aggregate( [
+                        {$stage_name: { expresión } },
+                        {$stage_name: { expresión } }
+                    ])</code></pre>
+                </section>
+
+                <section data-auto-animate>
+                    <h3>Exemplo</h3>
+                    <pre>Da rexión 15, contar cantos datos ten de cada provincia:<code data-trim data-noescape class="SQL">
+                        db.coviditalia.aggregate( [
+                            { $match : {"codice_regione": 15}},
+                            { $group: { 
+                                _id: "$codice_provincia", 
+                                total_provincias: {$count:{}} }
+                            }
+                        ])
+                    </code></pre>
+                </section>
+                
+                <section data-auto-animate>
+                    <h3>Exemplo</h3>
+                    <pre>Da rexión 15, contar cantos datos ten de cada provincia:<code data-trim data-noescape class="SQL">
+                        db.coviditalia.aggregate( [
+                            { $match : {"codice_regione": 15}},
+                            { $group: { 
+                                _id: "$codice_provincia", 
+                                total_provincias: {$count:{}} }
+                            }, {$limit: 5}
+                        ])
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Operadores (hai moitos...)</h3>
+                    <ul>
+                        <li><strong>$match</strong> &mdash; Filtra os datos (sintaxe de find).</li>
+                        <li><strong>$group</strong> &mdash; Agrupa os documentos.</li>
+                        <li><strong>$sort</strong> &mdash; Ordea según criterio.</li>
+                        <li><strong>$project</strong> &mdash; Campos a amosar (última fase).</li>
+                        <li><strong>$set</strong> &mdash;</li>
+                        <li><strong>$count</strong> &mdash;</li>
+                        <li><strong>$out</strong> &mdash; Mete elementos resultante nunha colección nova.</li>
+                        <li><strong>$concat</strong> &mdash;</li>
+                        <li><strong>$lookup</strong> &mdash;</li>
+                        <li><strong>$unwind</strong> &mdash;</li>
+                    </ul>
+                    <aside class="notes">
+                        <p>Project debería ser a última fase a executar para dicir qué campos precisamos. MongoDB xa planifica todo correctamente para ler só os campos necesarios e optimizar a consulta.</p>
+                        <p>Coidado con $out: Sobreescribe a colección se esta xa existe (ou crea unha nova senón).</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Exemplo</h3>
+                    <pre>Amosar as claves: data, estado, idrexion e nomerexion da 15:<code data-trim data-noescape class="SQL">
+                        db.coviditalia.aggregate( [
+                            { $match : {"codice_regione": 15}},
+                            { $project : {
+                                data: 1, 
+                                estado: "$stato", 
+                                idrexion: "$codice_regione", 
+                                nomerexion: "$denominazione_regione"}}
+                        ])
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>$out &mdash; Almacenar resultados nunha colección</h3>
+                    <pre><code data-trim data-noescape class="SQL">
+                    db.coviditalia.aggregate( [
+                        { $match : {"codice_regione": 15}},
+                        { $project : {
+                            data: 1, 
+                            estado: "$stato", 
+                            idrexion: "$codice_regione", 
+                            nomerexion: "$denominazione_regione"}}, 
+                        {$out: "rexions_en_galego"}
+                    ])</code></pre>
+                </section>
+
+                <section>
+                    <h3>Exercicio proposto</h3>
+                    Almacenar (empregando aggregate e pipelines) os nomes das etiquetas da colección coviditalia en galego na colección: covidit-traducido.
+                </section>
+
+                <section>
+                    <h3>Boas prácticas</h3>
+                    <ul>
+                        <li>Filtrar canto antes ($match) para reducir o número de documentos a procesar.</li>
+                        <li>Tratar de empregar $project o máis tarde posible.</li>
+                        <li>Cando empreguemos $out, poñelo ao final.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                    <h1>Subdocumentos</h1>
+                    <h2>&dArr;</h2>
+                    <aside class="notes"></aside>
+                </section>
+
+                <section>
+                    <ul>
+                        <li>Notación punto: Documentos uns dentro doutros</li>
+                        <li>Exemplos</li>
+                    </ul>
+                </section>
+
+            </section>
+
+            <section>
+                <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)">
+                    <h1>Transaccións</h1>
+                    <h2>&dArr;</h2>
+                    <aside class="notes"></aside>
+                </section>
+                <section>
+                    <h3>Transacción clásica ACID</h3>
+                    <img src="imagenes/transaccion-acid.png" alt="Transacción ACID" class="r-stretch"/>
+                </section>
+                <section>
+                    <h3>updateOne() é transacción ACID?</h3>
+                    <pre><code data-trim data-noescape>
+                        db.alumnado.updateOne(
+                            {_id: 1234},
+                            {
+                                {$set: {
+                                    nome: 'Felipe',
+                                    modulos: ['FOL', 'Programación I'],
+                                    titor: 'Outro profe'
+                                } }
+                            }
+                        )
+                    </code></pre>
+                    <p class="fragment">Podería ser considerada ACID, posto que hay 3 actualizacións e se executan ou todas ou ningunha. Pode afectar tamén a subdocumentos.</p>
+                </section>
+                <section>
+                    <h3>Ollo coas transaccións!</h3>
+                    <ul>
+                        <li>Estamos a bloquear os documentos implicados. Isto <strong>aumenta a latencia</strong> e <strong>diminúe o rendemento</strong>.</li>
+                        <li>Hai que empregar transaccións só cando é absolutamente necesario.</li>
+                        <li>Por defecto unha transacción ten un <span class="trojo">tempo máximo</span> de <strong>1 minuto tras a primeira escritura</strong>.</li>
+                        <li>Só funcionan nos servidores configurados como «<strong>replica set</strong>» e non «<strong>standalone</strong>»</li>
+                    </ul>
+                    <aside class="notes">
+                        <p>MongoServerError: Transaction 1 has been aborted.</p>
+                        <p>Procuraremos empregar operacións sobre documentos soltos, por ser inherentemente atómicas.</p>
+                    </aside>
+                </section>
+                <section>
+                    <h3>Exemplo dunha transacción</h3>
+                    <pre><code data-trim data-noescape>
+                        const asesion = db.getMongo().startSession()
+                        asesion.startTransaction()
+                        const estudantesmedran=
+                            asesion.getDatabase('alumnado').getCollection('estudantes')
+                        estudantesmedran.updateMany({}, {$inc : {'idade': 1}})
+                        asesion.commitTransaction()
+                    </code></pre>
+                    <p><a href="imagenes/exemplo-mongodb-estudantes-atlas.txt">Preme AQUÍ e baixa o exemplo do JSON para Atlas</a></p>
+                    <small>
+                        <p><span class="trojo">MongoServerError:</span> Transaction numbers are only allowed on a replica set member or mongos. 
+                            <span class="trojo">Ollo!</span> Non existen transaccións cando mongodb está en modo «standalone».
+                    </small>
+                </section>
+                <section>
+                    <h3>Transaccións</h3>
+                    <pre><code data-trim data-noescape>
+                        const asesion = db.getMongo().startSession()
+                        asesion.startTransaction()
+                        const ops = 
+                            asesion.getDatabase('alumnado').getCollection('estudantes')
+                    </code></pre>
+                    <h4>Confirmar</h4>
+                    <pre><code data-trim data-noescape>
+                        asesion.commitTransaction()
+                    </code></pre>
+                    <h4>Rexeitar</h4>
+                    <pre><code data-trim data-noescape>
+                        asesion.abortTransaction()
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Transacción en MongoDB</h3>
+                    <img src="imagenes/transaccion-mongodb.png" alt="Transacción MongoDB (Atlas)" class="r-stretch"/>
+                </section>
+
+            </section>
+
+            <section>
+                    <section>
+                        <h1>Índices</h1>
+                        <h2>&dArr;</h2>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section data-markdown>
+                        ### Que son os índices?
+                        - Estruturas de datos que almacenan unha pequena porción dos datos da colección dunha forma fácil (moi rápida) de percorrer.
+                        ### Que vantaxas teñen?
+                        - Evitan ter que escanear documento a documento (**collection scan**).
+                        - Engaden velocidade.
+                        - Ordean os datos referidos ascendente o descendentemente.
+                    </section>
+
+                    <section>
+                        <img src="imagenes/indices-e-ordenacion.png" alt="Esquema do funcionamento dos índices" class="r-stretch"/>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section data-markdown>
+                        ### Creación dun índice
+                            db.collection.createIndex( { name: -1 } )
+
+                        - O número indica a ordenación de datos ascendente (1) ou descendente (-1)
+                        - Por defecto créase índice por defecto na "columna" **_id**
+                        - Tamén se poden crear índices compostos (de dúas ou máis claves)
+                    </section>
+
+                    <section>
+                        <h3>Nome por defecto do índice</h3>
+                        <p style="text-align: justify;">Nomes dos índices e a dirección separados por _</p>
+                        <p style="text-align: justify;">Exemplo:</p>
+                            <pre><code>{nome : 1, apelidos: -1}</code></pre>
+                        <p style="color: darkorange">nome_1_apelidos-1</p>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Creación dun índice cun nome</h3>
+                        <pre><code data-trim data-noescape>db.estudantes.createIndex(
+                        { apelidos: 1, expediente: -1 } ,
+                        { name: "Notas e apelidos" } )
+                        </code></pre>
+                        <h3>Ver os índices dunha colección</h3>
+                         <pre><code>db.estudantes.getIndexes()</code></pre>
+                         <aside class="notes"></aside>
+                    </section>
+
+                    <section data-markdown>
+                        ### Tipos de índices
+                        - Simples.
+                        - Compostos (máis dunha clave, cada unha ordenada como se queira).
+                        - Multiclave (asociados a un array).
+                        - Xeoespaciais.
+                        - De búsqueda de texto.
+                        - Hashed.
+                        - Clustered.
+                    </section>
+
+                    <section data-markdown>
+                        ### Propiedades que poden ter
+                        - **Únicos (UNIQUE)**: Rexeitan valores duplicados.
+                        - **Parciais (PARTIAL)**: So para algúns documentos que cumplan unhas propiedades.
+                        - **Selectivos/Dispersos (Sparse)**: Só para os documentos que teñan a clave de índice.
+                        - **TTL**: Para borrar documentos co tempo (útil en datos xerados por máquinas)
+                        - **Agochados (HIDEN)**: Existen pero non se empregan. Permiten avaliar o impacto de quitalos
+                    </section>
+
+                    <section data-markdown>
+                        ### Cotexo de datos (Data collation)
+                        - Os índices dependen do idioma para a ordenación.
+                        - Regras de acentuación, maiúsculas, minúsculas etc afectan.
+                        - Exemplos: Idioma fracés, español ou caracteres en cirílico (ou mezcla).
+                    </section>
+
+                    <section>
+                        <h3>Creando índice con cotexo de idioma</h3>
+                        Creamos o índice:
+                        <pre><code data-trim data-noescape>db.estudantes.createIndex( {apelidos: 1},
+                                {collation: {locale: "es"}} )</code></pre>
+                        Empregámolo nunha consulta find:
+                        <pre><code data-trim data-noescape>db.estudantes.find({apelidos: "Sánchez"})
+                                .collation({locale: "es"})</code></pre>
+                        Pero ollo, se temos activado o cotexo binario «simple», non poderemos empregar o índice:
+                        <pre><code data-trim data-noescape>db.estudantes.find({apelidos: "Sánchez"})</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Búsqueda</h3>
+                        <h4><strong>Índice de búsqueda.</strong></h4>
+                        <ul>
+                            <li>É unha búsqueda por relevancia.</li>
+                            <li>O índice indica como debería facerse a busca</li>
+                        </ul>
+                        <h4><strong>Índice de BBDD</strong></h4>
+                        <ul>
+                            <li>Fai as consultas a esta búsqueda máis eficientes</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Índice de búsqueda</h3>
+                        <h4>Dynamic Mapping</h4>
+                        <ul>
+                            <li>Por defecto. A máis rápida de configurar.</li>
+                            <li>Empréganse tódolos campos agás: Booleans, objectIds e timestamps.</li>
+                            <li>Baseada en: <a href="https://lucene.apache.org">Apache Lucene</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Búsquedas con Apache Lucene</h3>
+                        
+                        <pre><code data-trim data-noescape>
+                        {
+                            "name": "sample_supplies-sales-dynamic",
+                            "searchAnalyzer": "lucene.standard",
+                            "analyzer": "lucene.standard",
+                            "collectionName": "sales",
+                            "database": "sample_supplies",
+                            "mappings": {
+                                "dynamic": true
+                            }
+                        }
+                        </code></pre>
+                        <small><a href="https://www.mongodb.com/docs/manual/applications/indexes/">Exemplo do titorial oficial</a></small>
+                        
+                        <pre><code data-trim data-noescape>
+                        atlas clusters search indexes create \
+                            --clusterName myAtlasClusterEDU \
+                            -f /app/search_index.json
+                        </code></pre>
+                        
+                    </section>
+                    
+                    <section>
+                        <h3>Índice Apache Lucene</h3>
+                        <pre><code data-trim data-noescape>
+                        atlas clusters search indexes list \
+                            --clusterName myAtlasClusterEDU \
+                            --db sample_supplies --collection sales
+                        </code></pre>
+                            
+                        <pre><code data-trim data-noescape>
+                        mongosh -u myAtlasDBUser -p myatlas-001 \
+                            $MY_ATLAS_CONNECTION_STRING/sample_supplies
+                        </code></pre>
+                    </section>
+
+                    <section>
+
+                        <h3>Empregando índice en agregación</h3>
+                        <pre><code data-trim data-noescape>
+                            db.sales.aggregate([
+                            {
+                                $search: {
+                                index: 'sample_supplies-sales-dynamic',
+                                text: {
+                                    query: 'notepad', path: { 'wildcard': '*' }
+                                } } },
+                                {
+                                    $set: {
+                                        score: { $meta: "searchScore" }
+                                    }
+                                }
+                                ])
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Índice de búsqueda</h3>
+                        <h4>Static Indexing</h4>
+                        Os campos sobre os que se efectúa la búsqueda son os mesmos.
+
+                    </section>
+
+                    <section>
+                        <h3>Índices de BBDD para busca de texto</h3>
+                        <h4>Creación cun so campo</h4>
+                        <pre><code data-trim data-noescape>db.estudantes.createIndex({titor: "text"})</code></pre>
+                        <h4>Buscar empregando o índice de búsqueda</h4>
+                        <pre><code data-trim data-noescape>db.estudantes.find({$text:{$search:"Sánchez"}})</code></pre>
+                        <aside class="notes">
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>Índices compostos de busca de texto</h3>
+                            <pre>Crear o índice<code data-trim data-noescape>db.estudantes.createIndex({titor: "text", apelidos: "text"})</code></pre>
+                            <pre>Empregalo<code data-trim data-noescape>db.estudantes.find({$text:{$search:"Sánchez"}})</code></pre>
+                        <aside class="notes">
+                            <p>TODO:</p>
+                            <p>Amosar pantalla con índice compuesto e mesmo índice $text para ver comportamento</p>
+                        </aside>
+
+                    </section>
+
+                    <section>
+                        <h3 class="r-fit-text">Índices ocultos</h3>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h4>Comportamento dos índices ocultos</h4>
+                        Están agochados do planificador, pero aínda así:
+                        <ul class="r-fit-text">
+                            <li>Se ten unha restrición UNIQUE, siguea aplicando.</li>
+                            <li>Se o índice é de tipo TTL, o índice aínda fai expirar os documentos.</li>
+                            <li>Son visibles en: listIndexes e db.acolleccion.getIndexes().</li>
+                            <li>Actualízanse coas operacións de escritura (siguen consumindo espacio e memoria)</li>
+                            <li>Inclúense en: db.collection.stats() e $indexStats.</li>
+                            <li>Agochar un índice ou amosar un índice agochado resetea as súas estatísticas ($indexStats).</li>
+                            <li>Agochar un índice oculto ou amosar un índice non oculto, non resetea as estatísticas.</li>
+                        </ul>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Restricións</h3>
+                        <ul>
+                            <li>Para agochar un índice debes ter o axuste: <strong>featureCompatibilityVersion</strong> establecido a 4.4 ou maior.</li>
+                            <li>Sen embargo, unha vez agochado o índice, este permanece oculto aínda que poñas <strong>featureCompatibilityVersion</strong> a 4.2.</li>
+                            <li>Non podes agochar o índice <strong>_id</strong>.</li>
+                            <li>Non podes empregar <strong>cursos.hint()</strong> nun índice agochado.</li>
+                        </ul>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Crear un índice oculto</h3>
+                        <pre><code data-trim data-noescape>
+                        db.estudantes.createIndex(
+                           { apelidos: 1 },
+                           { hidden: true }
+                        );
+                        </code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Agochar un índice</h3>
+                        <h4>Consideramos que temos creado o índice así:</h4>
+                        <pre><code data-trim data-noescape>db.estudantes.createIndex( { apelidos: 1, nome: 1 } );</code></pre>
+                        <h4>Opción 1: Co nome directamente</h4>
+                        <pre><code data-trim data-noescape>db.estudantes.hideIndex( "apelidos_1_nome_1" ); </code></pre>
+                        <h4>Opción 2: Especificando o índice completo</h4>
+                        <pre><code data-trim data-noescape>db.estudantes.hideIndex( { apelidos: 1, nome: 1 } );</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Amosar un índice oculto</h3>
+                        <pre><code data-trim data-noescape>db.estudantes.getIndexes()</code></pre>
+                        Dúas maneiras, ou especificando os índices (se é composto):
+                        <pre><code data-trim data-noescape>db.estudantes.unhideIndex( { apelidos: 1, nome: 1 } );</code></pre>
+                        Ou especificando o nome:
+                        <pre><code data-trim data-noescape>db.estudantes.unhideIndex( "apelidos_1_nome_1" );</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>explain() &mdash; Usamos índice?</h3>
+                        <pre><code data-trim data-noescape>
+                            db.coviditalia.explain().find({codice_regione: 15})
+                        </code></pre>
+                        Debemos mirar no <b>winningPlan</b> o valor de <b>stage</b>
+                        <ul>
+                            <li><b>IXSCAN</b>: Empregamos índice. Indica cal.</li>
+                            <li><b>COLLSCAN</b>: Non empregamos índice ningún.</li>
+                            <li><b>FETCH</b>: Os documentos lense dende a colección</li>
+                            <li><b>SORT</b>: Os documentos ordénanse na memoria.</li>
+                        </ul>
+                        <aside class="notes">
+                            <p>Como saber se un índice está sendo empregado por unha consulta. Tamén executionStats()
+                                permite saber como lle vai ao índice. <a href="https://www.mongodb.com/docs/manual/tutorial/measure-index-use/?_ga=2.55479138.810066485.1665291537-836515500.1666025886">Manual</a>.
+                            </p>
+                        </aside>
+                    </section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h3>Exercicio</h3>
+                        Na BBDD covid, na colección coviditalia, crea un índice por «data» e «denominazione_regione».
+                        <pre class="fragment"><code data-trim data-noescape>
+                        db.coviditalia.createIndex( 
+                            "data": 1, "denominazione_regione": 1 );</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h1>Miscelánea</h1>
+                        <h3>Nivel pro+</h3>
+                        <h2>&dArr;</h2>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Monitorización na web</h3>
+                        Servizo de MongoDB que nos ofrece visualizar e monitorizar a nosa BBDD dende a súa web (empregará as nosas estatísticas para mellorar os seus produtos).
+                        <pre>Activar o servizo<code data-trim data-noescape>
+                            db.enableFreeMonitoring()
+                        </code></pre>
+                        <pre>Desactivar o servizo<code data-trim data-noescape>
+                            db.disableFreeMonitoring()
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Telemetry</h3>
+                            Envía a MongoDB datos anónimos estatísticos para mellorar os seus produtos.
+                            <pre>Desactivar telemetría<code data-trim data-noescape>
+                                disableTelemetry()
+                            </code></pre>
+                            <pre>Activar telemetría<code data-trim data-noescape>
+                                enableTelemetry()
+                            </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Estatíscas interesantes</h3>
+                        Teñamos activas ou non as opcións anteriores, poderemos ver estatísticas sobre a BBDD e cada colección.
+                        <h4>Ver estatísticas da BBDD</h4>
+                        <pre><code data-trim data-noescape>database1&gt; db.stats()</code></pre>
+
+                        <h4>Ver estatísticas da coleccion «estudantes»</h4>
+                        <pre><code data-trim data-noescape>
+                            db.estudantes.stats()
+                        </code></pre>
+
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Modos de funcionamento de MongoDB</h3>
+                        <ul>
+                            <li>Standalone server</li>
+                            <li>Replica sets</li>
+                            <li>Sharded clusters</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>MongoDB Shell</h3>
+                        É unha contorna REPL (Read-Evaluate-Print-Loop) de Node.js, que nos dará acceso con código JavaScript a:
+                        <ul>
+                            <li>Variables.</li>
+                            <li>Funcións.</li>
+                            <li>Estruturas: Condicionais, iterativas (bucles).</li>
+                            <li>Outros mecanismos de control de fluxo.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Código Javascript na consola MongoSH</h3>
+                        <pre><code data-trim data-noescape>
+                            const artigosArray =
+                                ['auga', 'pan', 'leite', 'ovos'];
+                            const mercaBucle=
+                                (array) => array.forEach(
+                                    artigo => console.log(artigo)
+                                );
+                            mercaBucle(artigosArray);
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Conexión cunha URL</h3>
+                        Útil se empregamos un servizo gratuito (ou de pago) externo ou se configuramos a nosa BBDD en modo multi-servidor.
+                        <pre><code data-trim data-noescape>
+                        mongosh "mongodb+srv://host-ou-servidor/BBDD" \
+                            --apiVersion 1 --username O-MEU-USUARIO</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Compass</h3>
+                        É unha GUI (Graphical User Interface) que nos permite lanzar consultas (queries) e analizar os datos. Tamén nos facilita crear os pipelines de agregación.
+                    </section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h3>Exercicio</h3>
+                        <ul>
+                            <li>Rexístrate en <a href="https://www.mongodb.com/atlas/database">https://www.mongodb.com/atlas/database</a></li>
+                            <li>Crea unha BBDD gratuita</li>
+                            <li>Conecta dende mongosh</li>
+                            <li>Instala compass</li>
+                            <li>Conecta dende compass</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+
+                <section>
+                    <section>
+                        <h3>Modelado de datos</h3>
+                        <h4>Novo paradigma NO-SQL</h4>
+                        <h2>&dArr;</h2>
+                        <aside class="notes"></aside>
+                    </section>
+
+                    <section>
+                        <h3>Modelando relaciones</h3>
+                        <ul>
+                            <li>Embebidas (subdocumentos)</li>
+                            <li>Por referencia (cun _id)</li>
+                        </ul>
+                        <h3>Máximas</h3>
+                        <ul>
+                            <li>Estruturar os datos segundo consulta ou modifica a túa aplicación</li>
+                            <li>Principio: "Os datos aos que accedemos xuntos, deberían gardarse xuntos"</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>DATOS EMBEBIDOS</h3>
+                        <h4>Problemas/Desvantaxes:</h4>
+                        <ul>
+                            <li>Podemos crear documentos moi grandes.</li>
+                            <li>Os documentos grandes deben ser lidos completamente en memoria, o que pode afectar ao rendemento.</li>
+                            <li>Se engadimos datos e máis datos creamos o que se chama «Unbounded documents» que poden exceder o límite máximo de 16MB dun documento BSON.</li>
+                        </ul>
+                
+                    </section>
+                    <section>
+                        <h4>Son antipatróns no esquema:</h4>
+                        <ul>
+                            <li>Documentos excesivamente grandes.</li>
+                            <li>Unbounded documents (ilimitados/sen freo).</li>
+                        </ul>
+                        <aside class="notes">
+                        <p><a href="https://www.mongodb.com/developer/products/mongodb/schema-design-anti-pattern-summary/">Antipatróns no esquema:</a></p>
+                        <ul>
+                            <li><b>Massive arrays</b>: storing massive, unbounded arrays in your documents.</li>
+                            <li><b>Massive number of collections</b>: storing a massive number of collections (especially if they are unused or unnecessary) in your database.</li>
+                            <li><b>Unnecessary indexes</b>: storing an index that is unnecessary because it is (1) rarely used if at all or (2) redundant because another compound index covers it.</li>
+                            <li><b>Bloated documents</b>: storing large amounts of data together in a document when that data is not frequently accessed together.</li>
+                            <li><b>Separating data that is accessed together</b>: separating data between different documents and collections that is frequently accessed together.</li>
+                            <li><b>Case-insensitive queries without case-insensitive indexes</b>: frequently executing a case-insensitive query without having a case-insensitive index to cover it.</li>
+                        </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3>DATOS POR REFERENCIA</h3>
+                        <h4>Requiren:</h4>
+                        <ul>
+                            <li>Enlazado e Normalización de datos.</li>
+                        </ul>
+                        <h4>Vatanxes:</h4>
+                            <ul>
+                                <li>Evitan duplicación.</li>
+                                <li>Diminuen o tamaño dos documentos.</li>
+                            </ul>
+                        <h4>Desvantaxes:</h4>
+                        <ul>
+                            <li>Lemos datos de varias coleccións (ou varias veces) [JOIN]</li>
+                            <li>Ten un impacto no rendemento:<ul>
+                                <li>Require recursos extra.</li>
+                                <li>Ten impacto na velocidade de lectura.</li>
+                            </ul></li>
+                        </ul>
+                        <aside class="notes">
+                            <p>Deseñar para poder escalar o modelo</p>
+                            <p><b>Exemplo</b>: Un blogue que ten comentarios. Se gardamos os artigos cos comentarios, que ocorre se un artigo ten moitos comentarios?</p>
+                            <ul>
+                                <li>A <b>nivel xeral</b>: Temos un impacto na lectura (ler todo o documento, se temos varios así, é un problema)</li>
+                                <li>A <b>nivel de artigo</b>: 
+                                    <ul>
+                                        <li>Temos un impacto na escritura, posto que cada novo comentario nos obriga a escribir o documento completo.</li>
+                                        <li>A paxinación dos comentarios na web vólvese complexa.</li>
+                                    </ul>
+                                    </li>
+                                <li>O tamaño máximo dun documento BSON é de 16MB.</li>
+                            </ul>
+                        </pre>
+                        </aside>
+                    </section>
+                    
+                </section>
+                
+                <section data-markdown>
+                    ### Manual
+                    - https://www.mongodb.com/docs/manual
+                    ### JSON para probas (API REST)
+                    - https://dummyjson.com/
+                    - https://github.com/Ovi/DummyJSON
+                    - https://api.sampleapis.com/fakebank/accounts
+                </section>
+
+                <section>
+		            <img alt="QR materiales" id="qrmateriales">
+                    <p id="copyrightline" style="color: orange;">Jose Sánchez</p>
+		            <p><small><a href="" id="urlmateriales"><span id="textourlmateriales"></span></a></small></p>
+	                <blockquote><small>&ldquo;<em><strong>Errare humanum est, sed perseverare diabolicum</strong></em>&rdquo;</small></blockquote>
+        	        <small id="addemail">Se atopas erros, envíame un correo a: </small>
+                </section>
+        </div>
+        </div>
+
+<!-- Plugins de revealjs -->
+<script src="https://jfsanchez.es/cdn/resources/system/revealjs4/dist/reveal.js"></script>
+<script src="https://jfsanchez.es/cdn/resources/system/revealjs4/plugin/markdown/markdown.js"></script>
+<script src="https://jfsanchez.es/cdn/resources/system/revealjs4/plugin/highlight/highlight.js"></script>
+<script src="https://jfsanchez.es/cdn/resources/system/revealjs4/plugin/notes/notes.js"></script>
+<link rel="stylesheet" href="https://jfsanchez.es/cdn/resources/system/revealjs4/plugin/highlight/monokai.css">
+
+<!-- Generador de códigos QR-->
+<script src="https://jfsanchez.es/cdn/resources/js/qrious.js"></script>
+<script>
+
+  //Coger la propiedad para: texto de enlace, enlace y código QR
+  //var documenturl=document.head.querySelector("[property~=documenturl][content]").content;
+  var documenturl=document.location.href;
+  
+  Reveal.initialize({
+    plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ],
+    progress: true,
+    controlsBackArrows: 'faded',
+    //Math, Zoom, Marked
+  });
+
+  new QRious({
+    element: document.querySelector("#qrmateriales"),
+    value: documenturl,
+    size: 150,
+    backgroundAlpha: 0, // 0 Transparent
+    foreground: "#00008B",
+    level: "Q", // L(owest),M ,Q ,H(ighest)
+  });
+
+  document.querySelector("#textourlmateriales").innerText=documenturl;
+  document.querySelector("#urlmateriales").setAttribute('href', documenturl);
+  document.querySelector("#copyrightline").innerText=
+  document.head.querySelector("[name~=author][content]").content + " " +
+  document.head.querySelector("[property~=creationdate][content]").content;
+  document.querySelector("#addemail").innerText=document.querySelector("#addemail").innerText+
+  document.head.querySelector("[property~=emailuser][content]").content + "@" +
+  document.head.querySelector("[property~=emaildomain][content]").content;
+
+</script>
+
+</body>
+
+</html>
+
