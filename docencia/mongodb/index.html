@@ -52,15 +52,16 @@
     <body>
         <div class="reveal">
             <div class="slides">
-                <section>
+                <!--img src="imagenes/logo-mongodb.png" alt="Logo" class="r-stretch"/-->
+                <!--section>
 		            <h2 style="color: darkgoldenrod">Introdución a MongoDB</h2>
-                    <!--img src="imagenes/logo-mongodb.png" alt="Logo" class="r-stretch"/-->
                     <h5 style="color: black">Big Data Aplicado</h5>
        	            <h5 style="color: gray;">IA e BIG DATA</h5>
-                </section>
+                </section-->
 
                 <section id="indice">
-			        <h2 style="color: darkgoldenrod;">Índice</h2>
+			        <h3 style="color: darkgoldenrod;">Introdución a MongoDB</h3>
+                    <h4>Big Data Aplicado</h4>
                     <ul style="list-style-type: none;">
 			        <li><span class="tiposeccion" style="background-color: darkgreen; color:#fff">&nbsp;</span>
                         <a href="#conceptos_previos">Conceptos previos</a></li>
@@ -90,7 +91,7 @@
                 </section>
 
                 <section>
-                    <section id="conceptos_previos">
+                    <section id="conceptos_previos" data-background-gradient="radial-gradient(white, darkseagreen)">
                         <h3 style="color: darkgreen;"><span class="tiposeccion" style="background-color: darkgreen; color:#fff">&nbsp;</span> Conceptos previos</h3>
                         
                         <h2 style="color: darkgreen;">&dArr;</h2>
@@ -297,7 +298,7 @@
 
                 <section>
 
-                    <section id="instalacion">
+                    <section id="instalacion" data-background-gradient="radial-gradient(white, LemonChiffon)">
                         <h3><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span> Instalación de MongoDB</h3>
                         <h2>&dArr;</h2>
                     </section>
@@ -385,7 +386,7 @@
                 </section>
 
                 <section>
-                    <section id="conexion">
+                    <section id="conexion" data-background-gradient="radial-gradient(white, LavenderBlush)">
                         <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Conexión</h3>
                         <h2 style="color: darkviolet;">&dArr;</h2>
                         <aside class="notes"></aside>
@@ -945,7 +946,7 @@
             </section>
 
             <section>
-                <section id="agregacion">
+                <section id="agregacion" data-background-gradient="radial-gradient(white, LightPink)">
                     <h3 style="color: red;"><span class="tiposeccion" style="background-color: red;">&nbsp;</span> Aggregate (&quot;JOIN&quot;)</h3>
                     <h2 style="color: red;">&dArr;</h2>
                     <aside class="notes"></aside>
@@ -1065,7 +1066,7 @@
             </section>
 
             <section>
-                <section id="subdocumentos">
+                <section id="subdocumentos" data-background-gradient="radial-gradient(white, LavenderBlush)">
                     <h3 style="color: darkmagenta;"><span class="tiposeccion" style="background-color: magenta;">&nbsp;</span> Subdocumentos</h3>
                     <h2 style="color: darkmagenta;">&dArr;</h2>
                     <aside class="notes"></aside>
@@ -1081,7 +1082,7 @@
             </section>
 
             <section>
-                <section id="transaccions">
+                <section id="transaccions" data-background-gradient="radial-gradient(white, deepskyblue)">
                     <h3 style="color: royalblue;"><span class="tiposeccion" style="background-color: royalblue;">&nbsp;</span> Transaccións</h3>
                     <h2 style="color: royalblue;">&dArr;</h2>
                     <aside class="notes"></aside>
@@ -1160,7 +1161,7 @@
             </section>
 
             <section>
-                    <section id="indices">
+                    <section id="indices" data-background-gradient="radial-gradient(white, rgb(109, 68, 138))">
                         <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Índices</h3>
                         <h2 style="color: indigo;">&dArr;</h2>
                         <aside class="notes"></aside>
@@ -1184,64 +1185,71 @@
                         <aside class="notes"></aside>
                     </section>
 
-                    <section data-markdown>
-                        ### Creación dun índice
-                            db.collection.createIndex( { name: -1 } )
-
-                        - O número indica a ordenación de datos ascendente (1) ou descendente (-1)
-                        - Por defecto créase índice por defecto na "columna" **_id**
-                        - Tamén se poden crear índices compostos (de dúas ou máis claves)
+                    <section>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Creación dun índice</h3>
+                            <pre><code data-trim data-noescape>db.collection.createIndex( { name: -1 } )</code></pre>
+                        <ul>
+                            <li>O número indica a ordenación de datos <strong>ascendente (1)</strong> ou <strong>descendente (-1)</strong>.</li>
+                            <li>Créase índice por defecto na <i>"columna"</i> <strong>_id</strong></li>
+                            <li>Pódense crear índices compostos (de dúas ou máis claves)</li>
+                        </ul>
                     </section>
 
                     <section>
-                        <h3>Nome por defecto do índice</h3>
-                        <p style="text-align: justify;">Nomes dos índices e a dirección separados por _</p>
-                        <p style="text-align: justify;">Exemplo:</p>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Nome por defecto do índice</h3>
+                        <p style="text-align: justify;">Toman o nome das claves e a dirección separados por _</p>
+                        <p style="text-align: justify; font-weight: bold;">Exemplo:</p>
                             <pre><code>{nome : 1, apelidos: -1}</code></pre>
-                        <p style="color: darkorange">nome_1_apelidos-1</p>
+                        <p style="color: indigo">nome_1_apelidos-1</p>
                         <aside class="notes"></aside>
                     </section>
 
                     <section>
-                        <h3>Creación dun índice cun nome</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Creación dun índice cun nome</h3>
                         <pre><code data-trim data-noescape>db.estudantes.createIndex(
                         { apelidos: 1, expediente: -1 } ,
                         { name: "Notas e apelidos" } )
                         </code></pre>
-                        <h3>Ver os índices dunha colección</h3>
+                        <h3 style="color: indigo;">Ver os índices dunha colección</h3>
                          <pre><code>db.estudantes.getIndexes()</code></pre>
                          <aside class="notes"></aside>
                     </section>
 
-                    <section data-markdown>
-                        ### Tipos de índices
-                        - Simples.
-                        - Compostos (máis dunha clave, cada unha ordenada como se queira).
-                        - Multiclave (asociados a un array).
-                        - Xeoespaciais.
-                        - De búsqueda de texto.
-                        - Hashed.
-                        - Clustered.
-                    </section>
-
-                    <section data-markdown>
-                        ### Propiedades que poden ter
-                        - **Únicos (UNIQUE)**: Rexeitan valores duplicados.
-                        - **Parciais (PARTIAL)**: So para algúns documentos que cumplan unhas propiedades.
-                        - **Selectivos/Dispersos (Sparse)**: Só para os documentos que teñan a clave de índice.
-                        - **TTL**: Para borrar documentos co tempo (útil en datos xerados por máquinas)
-                        - **Agochados (HIDEN)**: Existen pero non se empregan. Permiten avaliar o impacto de quitalos
-                    </section>
-
-                    <section data-markdown>
-                        ### Cotexo de datos (Data collation)
-                        - Os índices dependen do idioma para a ordenación.
-                        - Regras de acentuación, maiúsculas, minúsculas etc afectan.
-                        - Exemplos: Idioma fracés, español ou caracteres en cirílico (ou mezcla).
+                    <section>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Tipos de índices</h3>
+                        <ul>
+                            <li>Simples.</li>
+                            <li>Compostos (máis dunha clave, cada unha ordenada como se queira).</li>
+                            <li>Multiclave (asociados a un array).</li>
+                            <li>Xeoespaciais.</li>
+                            <li>De búsqueda de texto.</li>
+                            <li>Hashed.</li>
+                            <li>Clustered.</li>
+                        </ul>
                     </section>
 
                     <section>
-                        <h3>Creando índice con cotexo de idioma</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Propiedades que poden ter</h3>
+                        <ul>
+                            <li><strong>Únicos (UNIQUE)</strong>: Rexeitan valores duplicados.</li>
+                            <li><strong>Parciais (PARTIAL)</strong>: So para algúns documentos que cumplan unhas propiedades.</li>
+                            <li><strong>Selectivos/Dispersos (Sparse)</strong>: Só para os documentos que teñan a clave de índice.</li>
+                            <li><strong>TTL</strong>: Para borrar documentos co tempo (útil en datos xerados por máquinas).</li>
+                            <li><strong>Agochados (HIDEN)</strong>: Existen pero non se empregan. Permiten avaliar o impacto de quitalos.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Cotexo de datos (Data collation)</h3>
+                        <ul>
+                            <li>Os índices dependen do idioma para a ordenación.</li>
+                            <li>Regras de acentuación, maiúsculas, minúsculas etc afectan.</li>
+                            <li>Exemplos: Idioma fracés, español ou caracteres en cirílico (ou mezcla).</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Creando índice con cotexo de idioma</h3>
                         Creamos o índice:
                         <pre><code data-trim data-noescape>db.estudantes.createIndex( {apelidos: 1},
                                 {collation: {locale: "es"}} )</code></pre>
@@ -1254,21 +1262,21 @@
                     </section>
 
                     <section>
-                        <h3>Búsqueda</h3>
-                        <h4><strong>Índice de búsqueda.</strong></h4>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Búsqueda</h3>
+                        <h4 style="color: indigo;"><strong>Índice de búsqueda.</strong></h4>
                         <ul>
                             <li>É unha búsqueda por relevancia.</li>
                             <li>O índice indica como debería facerse a busca</li>
                         </ul>
-                        <h4><strong>Índice de BBDD</strong></h4>
+                        <h4 style="color: indigo;"><strong>Índice de BBDD</strong></h4>
                         <ul>
                             <li>Fai as consultas a esta búsqueda máis eficientes</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h3>Índice de búsqueda</h3>
-                        <h4>Dynamic Mapping</h4>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Índice de búsqueda</h3>
+                        <h4 style="color: indigo;">Dynamic Mapping</h4>
                         <ul>
                             <li>Por defecto. A máis rápida de configurar.</li>
                             <li>Empréganse tódolos campos agás: Booleans, objectIds e timestamps.</li>
@@ -1277,7 +1285,7 @@
                     </section>
 
                     <section>
-                        <h3>Búsquedas con Apache Lucene</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Búsquedas con Apache Lucene</h3>
                         
                         <pre><code data-trim data-noescape>
                         {
@@ -1302,7 +1310,7 @@
                     </section>
                     
                     <section>
-                        <h3>Índice Apache Lucene</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Índice Apache Lucene</h3>
                         <pre><code data-trim data-noescape>
                         atlas clusters search indexes list \
                             --clusterName myAtlasClusterEDU \
@@ -1316,8 +1324,7 @@
                     </section>
 
                     <section>
-
-                        <h3>Empregando índice en agregación</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Empregando índice en agregación</h3>
                         <pre><code data-trim data-noescape>
                             db.sales.aggregate([
                             {
@@ -1336,24 +1343,24 @@
                     </section>
 
                     <section>
-                        <h3>Índice de búsqueda</h3>
-                        <h4>Static Indexing</h4>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Índice de búsqueda</h3>
+                        <h4 style="color: indigo;">Static Indexing</h4>
                         Os campos sobre os que se efectúa la búsqueda son os mesmos.
 
                     </section>
 
                     <section>
-                        <h3>Índices de BBDD para busca de texto</h3>
-                        <h4>Creación cun so campo</h4>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Índices de BBDD para busca de texto</h3>
+                        <h4 style="color: indigo;">Creación cun so campo</h4>
                         <pre><code data-trim data-noescape>db.estudantes.createIndex({titor: "text"})</code></pre>
-                        <h4>Buscar empregando o índice de búsqueda</h4>
+                        <h4 style="color: indigo;">Buscar empregando o índice de búsqueda</h4>
                         <pre><code data-trim data-noescape>db.estudantes.find({$text:{$search:"Sánchez"}})</code></pre>
                         <aside class="notes">
                         </aside>
                     </section>
 
                     <section>
-                        <h3>Índices compostos de busca de texto</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Índices compostos de busca de texto</h3>
                             <pre>Crear o índice<code data-trim data-noescape>db.estudantes.createIndex({titor: "text", apelidos: "text"})</code></pre>
                             <pre>Empregalo<code data-trim data-noescape>db.estudantes.find({$text:{$search:"Sánchez"}})</code></pre>
                         <aside class="notes">
@@ -1364,12 +1371,12 @@
                     </section>
 
                     <section>
-                        <h3 class="r-fit-text">Índices ocultos</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Índices ocultos</h3>
                         <aside class="notes"></aside>
                     </section>
 
                     <section>
-                        <h4>Comportamento dos índices ocultos</h4>
+                        <h4 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Comportamento dos índices ocultos</h4>
                         Están agochados do planificador, pero aínda así:
                         <ul class="r-fit-text">
                             <li>Se ten unha restrición UNIQUE, siguea aplicando.</li>
@@ -1384,7 +1391,7 @@
                     </section>
 
                     <section>
-                        <h3>Restricións</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Restricións</h3>
                         <ul>
                             <li>Para agochar un índice debes ter o axuste: <strong>featureCompatibilityVersion</strong> establecido a 4.4 ou maior.</li>
                             <li>Sen embargo, unha vez agochado o índice, este permanece oculto aínda que poñas <strong>featureCompatibilityVersion</strong> a 4.2.</li>
@@ -1395,7 +1402,7 @@
                     </section>
 
                     <section>
-                        <h3>Crear un índice oculto</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Crear un índice oculto</h3>
                         <pre><code data-trim data-noescape>
                         db.estudantes.createIndex(
                            { apelidos: 1 },
@@ -1406,18 +1413,18 @@
                     </section>
 
                     <section>
-                        <h3>Agochar un índice</h3>
-                        <h4>Consideramos que temos creado o índice así:</h4>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Agochar un índice</h3>
+                        <h4 style="color: indigo;">Consideramos que temos creado o índice así:</h4>
                         <pre><code data-trim data-noescape>db.estudantes.createIndex( { apelidos: 1, nome: 1 } );</code></pre>
-                        <h4>Opción 1: Co nome directamente</h4>
+                        <h4 style="color: indigo;">Opción 1: Co nome directamente</h4>
                         <pre><code data-trim data-noescape>db.estudantes.hideIndex( "apelidos_1_nome_1" ); </code></pre>
-                        <h4>Opción 2: Especificando o índice completo</h4>
+                        <h4 style="color: indigo;">Opción 2: Especificando o índice completo</h4>
                         <pre><code data-trim data-noescape>db.estudantes.hideIndex( { apelidos: 1, nome: 1 } );</code></pre>
                         <aside class="notes"></aside>
                     </section>
 
                     <section>
-                        <h3>Amosar un índice oculto</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Amosar un índice oculto</h3>
                         <pre><code data-trim data-noescape>db.estudantes.getIndexes()</code></pre>
                         Dúas maneiras, ou especificando os índices (se é composto):
                         <pre><code data-trim data-noescape>db.estudantes.unhideIndex( { apelidos: 1, nome: 1 } );</code></pre>
@@ -1427,7 +1434,7 @@
                     </section>
 
                     <section>
-                        <h3>explain() &mdash; Usamos índice?</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> explain() &mdash; Usamos índice?</h3>
                         <pre><code data-trim data-noescape>
                             db.coviditalia.explain().find({codice_regione: 15})
                         </code></pre>
@@ -1446,7 +1453,7 @@
                     </section>
 
                     <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
-                        <h3>Exercicio</h3>
+                        <h3 style="color: indigo;"><span class="tiposeccion" style="background-color: indigo;">&nbsp;</span> Exercicio</h3>
                         Na BBDD covid, na colección coviditalia, crea un índice por «data» e «denominazione_regione».
                         <pre class="fragment"><code data-trim data-noescape>
                         db.coviditalia.createIndex( 
@@ -1457,9 +1464,9 @@
                 </section>
 
                 <section>
-                    <section id="miscelanea">
+                    <section id="miscelanea" data-background-gradient="radial-gradient(white, rgb(250, 198, 192))">
                         <h3 style="color: salmon;"><span class="tiposeccion" style="background-color: salmon;">&nbsp;</span> Miscelánea</h3>
-                        <h4 style="color: salmon;">Nivel pro+</h4>
+                        <h4 style="color: salmon;">Tamén pode ser do teu interese...</h4>
                         <h2 style="color: salmon;">&dArr;</h2>
                         <aside class="notes"></aside>
                     </section>
@@ -1529,10 +1536,14 @@
                         </code></pre>
                     </section>
 
+                    <section>
+                        <a href="https://github.com/jfsanchez/SBD/blob/main/notebooks/bbdd/mongodb.ipynb" target="_blank">Conectar dende Python a MongoDB</a>
+                    </section>
+
                 </section>
 
                 <section>
-                    <section id="modelado">
+                    <section id="modelado" data-background-gradient="radial-gradient(white, palegreen)">
                         <h3 style="color: darkgreen;"><span class="tiposeccion" style="background-color: yellowgreen;">&nbsp;</span> Modelado de datos</h3>
                         <h4 style="color: darkgreen;">Novo paradigma NO-SQL</h4>
                         <h2 style="color: darkgreen;">&dArr;</h2>
