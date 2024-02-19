@@ -994,9 +994,9 @@
                             { $match : {"codice_regione": 15}},
                             { $group: { 
                                 _id: "$codice_provincia", 
-                                total_provincias: {$count:{}} }
+                                total_provincias: { $count:{} } }
                             }, 
-			    { $limit: 5 }
+                            { $limit: 5 }
                         ])
                     </code></pre>
                 </section>
