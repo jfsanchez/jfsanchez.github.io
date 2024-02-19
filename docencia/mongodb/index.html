@@ -974,7 +974,7 @@
 
                 <section data-auto-animate>
                     <h3 style="color: red;"><span class="tiposeccion" style="background-color: red;">&nbsp;</span> Exemplo</h3>
-                    <p>Da rexión 15, contar cantos datos ten de cada provincia:</p>
+                    <p>Da rexión 15, cantos datos ten de cada provincia?</p>
                     <pre><code data-trim data-noescape class="SQL">
                         db.coviditalia.aggregate( [
                             { $match : {"codice_regione": 15}},
@@ -988,14 +988,15 @@
                 
                 <section data-auto-animate>
                     <h3 style="color: red;"><span class="tiposeccion" style="background-color: red;">&nbsp;</span> Exemplo</h3>
-                    <p>Da rexión 15, contar cantos datos ten de cada provincia:</p>
+                    <p>Da rexión 15, cantos datos ten de cada provincia?</p>
                     <pre><code data-trim data-noescape class="SQL">
                         db.coviditalia.aggregate( [
                             { $match : {"codice_regione": 15}},
                             { $group: { 
                                 _id: "$codice_provincia", 
                                 total_provincias: {$count:{}} }
-                            }, {$limit: 5}
+                            }, 
+			    { $limit: 5 }
                         ])
                     </code></pre>
                 </section>
