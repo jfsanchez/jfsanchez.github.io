@@ -977,7 +977,7 @@
                     <p>Da rexión 15, cantos datos ten de cada provincia?</p>
                     <pre><code data-trim data-noescape class="SQL">
                         db.coviditalia.aggregate( [
-                            { $match : {"codice_regione": 15}},
+                            { $match: {"codice_regione": 15}},
                             { $group: { 
                                 _id: "$codice_provincia", 
                                 total_provincias: {$count:{}} }
@@ -991,7 +991,7 @@
                     <p>Da rexión 15, cantos datos ten de cada provincia?</p>
                     <pre><code data-trim data-noescape class="SQL">
                         db.coviditalia.aggregate( [
-                            { $match : {"codice_regione": 15}},
+                            { $match: {"codice_regione": 15}},
                             { $group: { 
                                 _id: "$codice_provincia", 
                                 total_provincias: { $count:{} } }
