@@ -6,7 +6,7 @@
 	  <meta name="author" content="Jose Sánchez">
 	  <meta property="emailuser" content="correo">
 	  <meta property="emaildomain" content="jfsanchez.es">
-	  <meta property="creationdate" content="&copy; Febreiro 2023">
+	  <meta property="creationdate" content="&copy; Febreiro 2023. Actualizado: Maio 2024">
 	  <!--meta property="documenturl" content="https://jfsanchez.es/"-->
 
       <meta charset="utf-8">
@@ -68,7 +68,7 @@
                     <li><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span>
                         <a href="#instalacion">Instalación de MongoDB</a></li>
                     <li><span class="tiposeccion" style="background-color: violet;">&nbsp;</span>
-                        <a href="#conexion">Conexión</a></li>
+                        <a href="#conexion">Conexión e creación de usuarios</a></li>
                     <li><span class="tiposeccion" style="background-color: darkred;">&nbsp;</span>
                         <a href="#crud">CRUD</a>, 
                         <span class="tiposeccion" style="background-color: red;">&nbsp;</span>
@@ -82,7 +82,7 @@
                     <li><span class="tiposeccion" style="background-color: salmon;">&nbsp;</span>
                         <a href="#miscelanea">Miscelánea</a></li>
                     <li><span class="tiposeccion" style="background-color: yellowgreen;">&nbsp;</span>
-                        <a href="#modelado">Recomendacións no modelado de datos</a></li>
+                        <a href="#modelado">Unha pincelada sobre modelado de datos</a></li>
                     </ul>
                     <!-- Anotacións -->
                     <aside class="notes">
@@ -100,7 +100,27 @@
                     </section>
 
                     <section>
-                        <iframe height="100%" width="100%" class="r-stretch" src="https://youtube.com/embed/RY_2gElt3SA?autoplay=0&controls=1&showinfo=0&autohide=1&rel=0"></iframe>
+                        <h3 style="color: darkgreen;"><span class="tiposeccion" style="background-color: darkgreen; color:#fff">&nbsp;</span> Como contar cun ordenador</h3>
+                        <!--iframe height="100%" width="100%" class="r-stretch" src="https://youtube.com/embed/RY_2gElt3SA?autoplay=0&controls=1&showinfo=0&autohide=1&rel=0"></iframe-->
+                        <p><a href="https://www.youtube.com/watch?v=RY_2gElt3SA&list=PL96C35uN7xGLLeET0dOWaKHkAlPsrkcha" target="_blank">Why Computers Can't Count Sometimes<br/>https://youtube.com/embed/RY_2gElt3SA</a></p>
+                        <p><strong>Conceptos</strong></p>
+                        <ul>
+                            <li>Lectura sucia &mdash; Dirty read</li>
+                            <li>Caché</li>
+                            <li>Condición de carreira &mdash; Race condition</li> 
+                            <li>Eventually Consistency &mdash; Consistencia ao final</li>
+                        </ul>
+                        <aside class="notes">
+                            <p>Outro vídeo: <a href="https://www.youtube.com/watch?v=IP-rGJKSZ3s&list=PL96C35uN7xGLLeET0dOWaKHkAlPsrkcha" target="_blank">The two general problem</a></p>
+                            Problemas:
+                            <ul>
+                            <li><strong>Dirty read</strong>: Ler un valor anterior/posterior, polo tanto inconsistente, cando outra xa se atopa confirmado (ou aínda pendente). Tamén pode ser un problema de lectura pantasma</li>
+                            <li><a href="https://en.wikipedia.org/wiki/Isolation_%28database_systems%29">Aillamento en BBDD (Isolation).</a></li>
+                            <li><strong>Race condition</strong>: Dependendo que parte de código chegue antes, o código terá unha saída diferente.</li>
+                            <li><strong>Eventually Consistency</strong>: Terá consistencia ao final, aínda que non fose consistente nos pasos intermedios.</li>
+                            <li><strong>Semáforo/Rexión crítica</strong>: Para modificar unha zona establécese un semáforo que lle indica ao resto de procesos un bloqueo a esa zona, que se elimina tras finalizar a modificación. Coidado de non crear un abrazo mortal (interbloqueo).</li>
+                            </ul>
+                        </aside>
                     </section>
 
                     <section>
@@ -307,7 +327,7 @@
                         <h3><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span> Modos de funcionamento</h3>
                         <ul>
                             <li><span style="font-weight: bolder; color: darkorange;">Standalone server</span>: Desenvolvemento e probas.</li>
-                            <li class="fragment"><span style="font-weight: bolder; color: darkorange;">Replica sets</span>: <i>Produción</i>. Engade redundancia e dispoñibilidade.</li>
+                            <li class="fragment"><span style="font-weight: bolder; color: darkorange;">Replica sets / cluster</span>: <i>Produción</i>. Engade redundancia e dispoñibilidade.</li>
                             <li class="fragment"><span style="font-weight: bolder; color: darkorange;">Sharded clusters</span>: <i>Produción</i>. Datos particionados. Alto volume de datos e operacións.</li>
                         </ul>
                         <aside class="notes">
@@ -335,32 +355,119 @@
 
                     <section>
                         <h3><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span> Clientes</h3>
-                        <h4>mongosh</h4>
-                        Cliente de consola, ten autocompletado.
-                        <h4>Compass</h4>
-                        Cliente gráfico (GUI). Permite lanzar consultas (queries) e analizar os datos. Facilita crear os pipelines de agregación. Conta tamén cunha version de mongosh.
+                        <h4>(CLI) mongosh</h4>
+                        <ul>
+                            <li>Cliente de consola <acronym lang="en" title="Read-Eval-Print-Loop (Lectura-Evaluación-Impresión)">REPL</acronym> en modo <acronym lang="en" title="Command-Line Interface">CLI</acronym>.</li>
+                            <li>Ten autocompletado.</li>
+                        </ul>
+                        <h4>(GUI) Compass</h4>
+                        <ul>
+                            <li>Cliente gráfico. <acronym lang="en" title="Graphical User Interface">GUI</acronym>.</li>
+                            <li>Pode lanzar consultas (queries) e analizar datos.</li>
+                            <li>Facilita crear os pipelines de agregación.</li>
+                            <li>Integra unha version de mongosh.</li>
+                        </ul>
+                    </section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h3>Autoavaliación</h3>
+                        <p>Non te perdas! <strong>mongosh, compass, atlas</strong>. Quen e quen?</p>
+                        <ul>
+                            <li class="fragment"><strong>mongosh</strong>: Cliente de liña de comando, modo texto ou CLI. Conecta a unha BD de mongo.</li>
+                            <li class="fragment"><strong>compass</strong>: Cliente gráfico ou GUI. Conecta a unha BD de mongo.</li>
+                            <li class="fragment"><strong>atlas</strong>: Versión comercial de mongo para a nube, administrable pola web (ou cliente).</li>
+                        </ul>
                     </section>
 
                     <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
                         <h3>Exercicio</h3>
-                        <ul>
-                            <li>Rexístrate en <a href="https://www.mongodb.com/atlas/database" target="_blank">https://www.mongodb.com/atlas/database</a></li>
-                            <li>Crea unha BBDD gratuita</li>
-                            <li>Conecta dende mongosh</li>
-                            <li>Instala compass</li>
-                            <li>Conecta dende compass</li>
-                        </ul>
+                        <ol>
+                            <li>Rexístrate en <strong>Atlas</strong>: <a href="https://www.mongodb.com/atlas/database" target="_blank">https://www.mongodb.com/atlas/database</a></li>
+                            <li>Crea unha BBDD gratuita.</li>
+                            <li>Mete o dataset de proba.</li>
+                            <li>Conecta dende <strong>mongosh</strong>.</li>
+                            <li>Instala <strong>compass</strong>.</li>
+                            <li>Conecta dende compass.</li>
+                        </ol>
                     </section>
 
                     <section>
-                        <h3><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span> Instalación con dockers</h3>
+                        <h3><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span> Instalación «standalone» con dockers</h3>
                         <pre><code data-trim data-noescape>docker run --name mongo \ 
     -e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
     -e MONGO_INITDB_ROOT_PASSWORD=abc123Secret \
     -v /root/mongo:/data/db \
     -p 27017:27017 \
-    mongo
-                        </code></pre>
+    mongo</code></pre>
+<h4>Conexión</h4>
+<pre><code class="bash" data-trim data-noescape>docker exec -it mongo \
+mongosh --host localhost --port 27017 --apiVersion 1 \
+--username mongoadmin --password abc123Secret
+</code></pre>
+                        <aside class="notes">
+                            <ul>
+                                <li><a href="https://jfsanchez.es/docs/docker-0-base-simple/">Instalación de docker</a></li>
+                                <li><a href="https://jfsanchez.es/docs/docker-2-mongodb/">Instalación de mongodb</a></li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h3>Exercicio</h3>
+                        <ul>
+                            <li>Instala <strong>WSL</strong> se estás en Microsoft Windows (ou docker desktop).</li>
+                            <li>Instala <strong>docker</strong> dentro da distro.</li>
+                            <li>Executa un docker de mongo en modo <strong>standalone</strong>.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span> Instalación «cluster» 1/2</h3>
+                        <pre><code class="bash" data-trim data-noescape>docker network create mongoR</code></pre>
+                        <pre><code class="bash" style="background-color: darkred;" data-trim data-noescape>docker run -d -p 27017:27017 --name mongoVermello \
+    --network mongoR mongo mongod \
+    --replSet coresRGB \
+    --bind_ip localhost,mongoVermello</code></pre>
+                        <pre><code class="bash" style="background-color: darkgreen;"  data-trim data-noescape>docker run -d -p 27027:27017 --name mongoVerde \
+    --network mongoR mongo mongod \
+    --replSet coresRGB \
+    --bind_ip localhost,mongoVerde</code></pre>
+
+                        <pre><code class="bash" style="background-color: darkblue;" data-trim data-noescape>docker run -d -p 27037:27017 --name mongoAzul \
+    --network mongoR mongo mongod \
+    --replSet coresRGB \
+    --bind_ip localhost,mongoAzul</code></pre>
+                        <aside class="notes">
+                            <ul>
+                                <li><a href="https://jfsanchez.es/docs/docker-0-base-simple/" target="_blank">Instalación de docker</a></li>
+                                <li><a href="https://jfsanchez.es/docs/docker-2-mongodb/" target="_blank">Instalación de mongodb</a></li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3><span class="tiposeccion" style="background-color: darkorange;">&nbsp;</span> Instalación «cluster». 2/2</h3>
+                        <h4>Configurar o cluster</h4>
+                        <pre><code class="bash" data-trim data-noescape>docker exec -it mongoVermello mongosh --eval "rs.initiate({
+        _id: \"coresRGB\",
+        members: [
+            {_id: 0, host: \"mongoVermello\"},
+            {_id: 1, host: \"mongoVerde\"},
+            {_id: 2, host: \"mongoAzul\"}
+        ]
+    })"</code></pre>
+                        <h4>Comprobar configuración</h4>
+                        <pre><code class="bash" data-trim data-noescape>docker exec -it mongoVermello mongosh --eval "rs.status()"</code></pre>
+                    </section>
+
+                    <section data-background-gradient="linear-gradient(to bottom, antiquewhite, white)">
+                        <h3>Exercicio</h3>
+                        <ul>
+                            <li>Executa os <strong>tres docker</strong> de mongo e configúraos para que funcionen en <strong>modo cluster</strong>.</li>
+                            <li>Tira o nodo <strong>vermello</strong> e conecta con compass ao <strong>verde</strong>.</li>
+                            <li>Tira o <strong>verde</strong> e conecta co compass ao <strong>azul</strong>.</li>
+                            <li>Volve levantar tódolos nodos e volve conectar ao <strong>vermello</strong> e mira se seguen a funcionar en <strong>modo cluster</strong>.</li>
+                        </ul>
                     </section>
 
                     <section>
@@ -371,23 +478,11 @@
                         </ul>
                     </section>
 
-                    <section data-background-gradient="linear-gradient(to bottom, white, silver)">
-                        <h3>Instalación con vagrant (antigo)</h3>
-
-                        <ol class="r-fit-text">
-                        <li>Clonar (ou pull) repositorio: <a href="https://github.com/jfsanchez/SBD/">https://github.com/jfsanchez/SBD/</a></li>
-                        <li>Ir ao directorio: <span style="font-weight: bolder;">escenarios/mongodb</span></li>
-                        <li>Despregar co comando:</li>
-                        </ol>
-                        <pre><code>vagrant up</code></pre>
-                        <p class="r-fit-text"><strong>Máis información (comandos e explicacións):</strong><br/><small><a href="https://github.com/jfsanchez/SBD/tree/main/escenarios/mongodb">https://github.com/jfsanchez/SBD/tree/main/escenarios/mongodb</a></small></p>
-                        <aside class="notes"></aside>
-                    </section>
                 </section>
 
                 <section>
                     <section id="conexion" data-background-gradient="radial-gradient(white, LavenderBlush)">
-                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Conexión</h3>
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Conexión e creación de usuarios</h3>
                         <h2 style="color: darkviolet;">&dArr;</h2>
                         <aside class="notes"></aside>
                     </section>
@@ -395,9 +490,11 @@
                     <section>
                         <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> MongoSH &mdash; Conexión</h3>
                         <h4 style="color: darkviolet;">Conectar a localhost</h4>
-                        <pre><code class="bash" data-trim data-noescape class="bash">vagrant@ubuntu-focal:~$ mongosh [--host localhost]</code></pre>
+                        <pre><code class="bash" data-trim data-noescape class="bash">usuario@local:~$ mongosh [--host localhost]</code></pre>
                         <h4 style="color: darkviolet;">Saír de mongosh</h4>
-                        <pre><code class="SQL" data-trim data-noescape class="bash">test&gt; quit</code></pre>
+                        <pre><code data-trim data-noescape class="bash">test&gt; quit</code></pre>
+                        <h4 style="color: darkviolet;">Autenticarse dende mongosh</h4>
+                        <pre><code class="SQL" data-trim data-noescape>db.auth("USUARIO", passwordPrompt() )</code></pre>
                         <aside class="notes"></aside>
                     </section>
 
@@ -458,6 +555,102 @@
                         <p>Unha base de datos e unha colección créanse automáticamente ao crear un documento</p>
                         <aside class="notes"></aside>
                     </section>
+
+                    <section>
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Crear usuarios con roles</h3>
+                        <pre><code class="SQL" data-trim data-noescape>use persoal
+db.createUser({user: "profesor123",
+    pwd: passwordPrompt(),  // ou "o contrasinal en claro"
+    roles: [ { "readWrite",  "dbAdmin" },
+      { role: "readWrite", db: "biblioteca" }
+  ]})
+</code></pre>
+                        <ul>
+                            <li>Da os roles de <strong>readWrite</strong> e <strong>dbAdmin</strong> na base de datos <strong>persoal</strong>.</li>
+                            <li>Da o rol de <strong>readWrite</strong> na base de datos <strong>biblioteca</strong>.</li>
+                            <li>Coidado!!! os usuarios créanse na BD onde estamos (--authenticationDatabase persoal).</li>
+                        </ul>
+                        <aside class="notes">
+                            <ul>
+                                <li><a href="https://www.mongodb.com/docs/manual/reference/method/db.createUser/">Creación de usuarios en MongoDB. Documenación oficial</a></li>
+                                <li><a href="https://www.mongodb.com/docs/manual/tutorial/create-users/">Crear usuarios (inclusive en atlas e con certificado). Documentación oficial</a></li>
+                            </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Crear usuarios con roles (2)</h3>
+                        LEMBRA! Aínda que non vexas a base de datos por non ter coleccións nin datos, os usuarios aínda existen!
+                        <pre><code class="SQL" data-trim data-noescape>use baseDatos
+db.getUsers()</code></pre>
+                    </section>
+
+                    <section data-background-gradient="radial-gradient(white, LavenderBlush)">
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Exercicio</h3>
+                        <ul>
+                            <li>Crea as bases de datos: <strong>alumnado</strong>, <strong>profesorado</strong>, <strong>biblioteca</strong>, <strong>videoclub</strong> e <strong>concesionario</strong>.</li>
+                            <li>Crea o usuario <strong>topicazo</strong> con acceso de <i>lectura/escritura</i> a: <strong>videoclub</strong> e <strong>concesionario</strong>.</li>
+                            <li>Crea o usuario </strong>adnauseam</strong> con acceso de <i>dbAdmin</i> a <strong>alumnado</strong>, <strong>profesorado</strong> e <strong>biblioteca</strong>.</li>
+                            <li>Conecta con compass cos usuarios para ver que permiten a conexión.</li>
+                        </ul>
+                    </section>
+                    <section data-background-gradient="radial-gradient(white, LavenderBlush)">
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Solución. 1/4</h3>
+                        <ul>
+                            <li>Crea as bases de datos: (...) </li>
+                        </ul>
+                        <pre class="fragment"><code class="SQL" data-trim data-noescape>// NON pases traballo! Por que?</code></pre>
+
+                        <aside class="notes"></aside>
+                    </section>
+                    <section data-background-gradient="radial-gradient(white, LavenderBlush)">
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Solución. 2/4</h3>
+                        <ul>
+                            <li>Usuario <strong>topicazo</strong> con <i>readWrite</i> a: <strong>videoclub</strong> e <strong>concesionario</strong>.</li>
+                        </ul>
+                        <pre class="fragment"><code class="SQL" data-trim data-noescape>use videoclub
+db.createUser({user: "topicazo",
+  pwd: "aqui-non-debe-ir",
+  roles: [ { role: "readWrite", db: "videoclub" },
+  { role: "readWrite", db: "concesionario" }
+]})</code></pre>
+<h4 class="fragment">Conexión a videoclub</h4>
+                        <pre class="fragment"><code class="bash" data-trim data-noescape>docker exec -it mongoVermello \
+  mongosh --host localhost --port 27017 --apiVersion 1 \
+  videoclub --username topicazo --password aqui-non-debe-ir</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+                    <section data-background-gradient="radial-gradient(white, LavenderBlush)">
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Solución. 3/4</h3>
+                        <h4>Conexión a BD concesionario</h4>
+                        <p>Funcionouche? Por que?</p>
+                        <p class="fragment">Ollo! o usuario está na BD videoclub</p>
+                        <pre class="fragment"><code class="bash" data-trim data-noescape>docker exec -it mongoVermello \
+  mongosh --host localhost --port 27017 --apiVersion 1 \
+  concesionario --username topicazo --password aqui-non-debe-ir \
+  --authenticationDatabase videoclub</code></pre>
+                        <aside class="notes"></aside>
+                    </section>
+                    <section data-background-gradient="radial-gradient(white, LavenderBlush)">
+                        <h3 style="color: darkviolet;"><span class="tiposeccion" style="background-color: violet;">&nbsp;</span> Solución. 4/4</h3>
+                        <ul>
+                            <li>Crea o usuario </strong>adnauseam</strong> con acceso de <i>dbAdmin</i> a <strong>alumnado</strong>, <strong>profesorado</strong> e <strong>biblioteca</strong>.</li>
+                            <li>Podes crear o usuario varias veces para cada BD ou ben crealo na BD <strong>admin</strong>.</li>
+                        </ul>
+
+                        <pre><code class="SQL" data-trim data-noescape>use admin
+db.createUser({user: "adnauseam",
+    pwd: passwordPrompt(),
+    roles: [ { role: "dbAdmin", db: "alumnado" },
+    { role: "dbAdmin", db: "profesorado" },
+    { role: "dbAdmin", db: "biblioteca" }
+]})</code></pre>
+<pre class="fragment"><code class="bash" data-trim data-noescape>docker exec -it mongoVermello \
+    mongosh --host localhost --port 27017 --apiVersion 1 \
+    alumnado --username adnauseam \
+    --authenticationDatabase admin</code></pre>
+                    </section>
+
                 </section>
 
                 <section data-background-gradient="linear-gradient(to bottom, antiquewhite, linen)" id="crud">
@@ -1638,6 +1831,23 @@
                                 <li>O tamaño máximo dun documento BSON é de 16MB.</li>
                             </ul>
                         </pre>
+                        </aside>
+                    </section>
+                    <section>
+                        <h3 style="color: darkgreen;"><span class="tiposeccion" style="background-color: yellowgreen;">&nbsp;</span> Schema validation</h3>
+                        
+                        <aside class="notes">
+                            <p><strong>Schema validation</strong></p>
+                            <ul>
+                                <li>https://www.mongodb.com/docs/manual/core/schema-validation/specify-json-schema/#std-label-schema-validation-json</li>
+                                <li>https://www.mongodb.com/docs/manual/core/schema-validation/specify-query-expression-rules/#std-label-schema-validation-query-expression</li>
+                                <li>https://www.mongodb.com/docs/manual/core/schema-validation/specify-json-schema/specify-allowed-field-values/#std-label-schema-allowed-field-values</li>
+                                <li>https://www.mongodb.com/docs/manual/core/schema-validation/view-existing-validation-rules/#std-label-schema-view-validation-rules</li>
+                                <li>https://www.mongodb.com/docs/manual/core/schema-validation/update-schema-validation/#std-label-schema-update-validation</li>
+                                <li>https://www.mongodb.com/docs/manual/core/schema-validation/use-json-schema-query-conditions/#std-label-use-json-schema-query-conditions</li>
+                                <li>https://www.mongodb.com/docs/manual/core/schema-validation/bypass-document-validation/#std-label-schema-bypass-document-validation</li>
+                                <li>https://www.mongodb.com/developer/products/mongodb/mongodb-schema-design-best-practices/</li>
+                            </ul>
                         </aside>
                     </section>
                     
