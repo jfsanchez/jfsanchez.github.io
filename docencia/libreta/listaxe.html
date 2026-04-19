@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Asistencia</title>
+  <script 
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+  integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<style>
+  .form-container {
+    max-width: 420px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+    font-family: Arial, sans-serif;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #333;
+  }
+
+  .form-group input {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #666;
+  }
+</style>
+
+<h1>Xerar lista de asistencia</h1>
+
+<form>
+<div class="form-container">
+  <div class="form-group">
+    <label for="titulo">Evento / Título</label>
+    <input id="titulo" type="text" value="Lista de asistencia. Exame: XXXX - Xª Avaliación"/>
+  </div>
+
+  <div class="form-group">
+    <label for="grupo">Grupo</label>
+    <input id="grupo" placeholder="Ex: 1ºA" />
+  </div>
+
+  <div class="form-group">
+    <label for="fecha">Data/Fecha</label>
+    <input type="date" id="fecha" />
+  </div>
+
+  <div class="form-group">
+    <label for="filas">Número de alumnado</label>
+    <input type="number" id="filas" value="42" min="1" />
+  </div>
+  <div class="form-group">
+    <label><input type="checkbox" id="usarCabecera">Incluir cabeceira</label>
+  </div>
+</div>
+
+<button style="padding: 1em; font-size: 1.2em;" onclick="generarPDF()">✅ Xerar PDF!</button>
+<button style="padding: 1em; font-size: 1.2em;" type="reset">❌ Borrar</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    fechaActual();
+  });
+document.querySelector("form").addEventListener("submit", function(e) {
+  e.preventDefault();
+});
+document.querySelector("form").addEventListener("reset", function () {
+  setTimeout(() => {
+    fechaActual();
+  }, 0);
+});
+function fechaActual() {
+    const hoy = new Date().toISOString().split("T")[0];
+    document.getElementById("fecha").value = hoy;
+}
+
+async function loadImage(url) {
+  const res = await fetch(url);
+  const blob = await res.blob();
+  return new Promise(r => {
+    const reader = new FileReader();
+    reader.onload = () => r(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function generarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const titulo = document.getElementById("titulo").value;
+  const grupo = document.getElementById("grupo").value;
+  const fecha = document.getElementById("fecha").value;
+  const totalFilas = parseInt(document.getElementById("filas").value);
+
+  const img = await loadImage("imagen-cabecera.png");
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  const margin = 10;
+  const left = margin;
+  const right = pageWidth - margin;
+
+  const rowHeight = 11;//8
+
+  const xNumEnd = left + 15;
+  const xAlumnoEnd = left + 150;
+  const usarCabecera = document.getElementById("usarCabecera").checked;
+
+  // 👉 calcular altura de cabecera SIN dibujar
+  function getHeaderHeight() {
+    return 10 + 15 + 3 + 8 + rowHeight; 
+    // margen + banner + separación + texto + cabecera tabla
+  }
+
+  function drawHeader(page, total) {
+    let y = margin;
+
+    //doc.addImage(img, "PNG", left, y, right - left, 15);
+    //y += 18+3;
+    if (usarCabecera) {
+         doc.addImage(img, "PNG", left, y, right - left, 15);
+         y += 18+3;
+    } else {
+        y += 10;
+    }
+    
+
+    doc.setFontSize(14);
+    doc.setFont(undefined, "bold");
+    doc.text(titulo, left, y);
+    doc.setFont(undefined, "normal");
+
+
+    doc.setFontSize(10);
+    doc.text(`Data/Fecha: ${fecha}`, right, y, { align: "right" });
+    doc.text(`Grupo: ${grupo}`, right, y - 4, { align: "right" });
+
+    y += 8;
+
+    doc.setFillColor(220);
+    doc.rect(left, y, right - left, rowHeight, "F");
+
+    doc.setFontSize(12);
+    doc.line(left, y, right, y);                 // línea superior
+    doc.line(left, y + rowHeight, right, y + rowHeight); // inferior
+    doc.line(xNumEnd, y, xNumEnd, y + rowHeight); // separador Nº
+    doc.line(xAlumnoEnd, y, xAlumnoEnd, y + rowHeight); // separador Firma
+    doc.text("Nº", left + 2, y + 6);
+    doc.text("Alumno/a", xNumEnd + 2, y + 6);
+    doc.text("Sinatura/Firma", xAlumnoEnd + 2, y + 6);
+
+    return y + rowHeight;
+  }
+
+  // ✅ cálculo limpio
+  const headerHeight = getHeaderHeight();
+  const usableHeight = pageHeight - headerHeight - margin;
+  const filasPorPagina = Math.floor(usableHeight / rowHeight);
+  const totalPaginas = Math.ceil(totalFilas / filasPorPagina);
+
+  let fila = 0;
+
+  for (let p = 1; p <= totalPaginas; p++) {
+
+    if (p > 1) doc.addPage();
+
+    let yStart = drawHeader(p, totalPaginas);
+
+    let filasEnPagina = Math.min(filasPorPagina, totalFilas - fila);
+
+    for (let i = 0; i < filasEnPagina; i++) {
+      let y = yStart + i * rowHeight;
+
+      // fondo Nº
+      doc.setFillColor(240);
+      doc.rect(left, y, xNumEnd - left, rowHeight, "F");
+
+      //doc.text(String(fila + 1), left + 2, y + 6);
+      doc.setFont(undefined, "bold");
+      doc.text(String(fila + 1), left + 7, y + 6, { align: "center" });
+      doc.setFont(undefined, "normal");
+      
+      doc.line(left, y, right, y);
+      doc.line(xNumEnd, y, xNumEnd, y + rowHeight);
+      doc.line(xAlumnoEnd, y, xAlumnoEnd, y + rowHeight);
+
+      fila++;
+    }
+
+    let yEnd = yStart + filasEnPagina * rowHeight;
+
+    doc.line(left, yEnd, right, yEnd);
+
+    // bordes
+    doc.line(left, yStart - rowHeight, left, yEnd);
+    doc.line(right, yStart - rowHeight, right, yEnd);
+
+    // numeración
+    doc.setFontSize(10);
+    doc.text(`${p}/${totalPaginas}`, right, pageHeight - 5, { align: "right" });
+  }
+
+  doc.save("asistencia.pdf");
+}
+</script>
+
+</body>
+</html>
