@@ -1,10 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Papeletas de votación</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script 
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+  integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -54,15 +57,26 @@
 
 <h2>Xerador de papeletas (A4 &rarr; 8 por páxina)</h2>
 
+<form>
 <div class="form-container">
   <div class="form-group">
 <label for="textoAnual">Texto de fondo: </label>
-<input type="text" id="textoAnual" placeholder="Ex: Votación 20XX 1ºA">
+<input type="text" id="textoAnual" placeholder="Ex: Votación 20XX 1ºA" required>
 </div></div>
 
 <button style="padding: 1em; font-size: 1.2em;" onclick="generarPDF()">✅ Xerar PDF!</button>
+<button style="padding: 1em; font-size: 1.2em;" type="reset">❌ Borrar</button>
+</form>
 
 <script>
+document.querySelector("form").addEventListener("submit", function(e) {
+  e.preventDefault();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("textoAnual").focus();
+});
+
 function generarPDF() {
   const { jsPDF } = window.jspdf;
 
