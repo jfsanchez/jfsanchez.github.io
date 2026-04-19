@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Papeletas de votación</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  .form-container {
+    max-width: 420px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+    font-family: Arial, sans-serif;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #333;
+  }
+
+  .form-group input {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #666;
+  }
+
+  </style>
+</head>
+<body>
+
+<h2>Xerador de papeletas (A4 &rarr; 8 por páxina)</h2>
+
+<div class="form-container">
+  <div class="form-group">
+<label for="textoAnual">Texto de fondo: </label>
+<input type="text" id="textoAnual" placeholder="Ex: Votación 20XX 1ºA">
+</div></div>
+
+<button style="padding: 1em; font-size: 1.2em;" onclick="generarPDF()">✅ Xerar PDF!</button>
+
+<script>
+function generarPDF() {
+  const { jsPDF } = window.jspdf;
+
+  //const textoAnual = prompt("Introduce el texto gris del año:");
+  const textoAnual = document.getElementById("textoAnual").value;
+  if (!textoAnual) return;
+
+  const doc = new jsPDF("portrait", "mm", "a4");
+
+  const pageW = 210;
+  const pageH = 297;
+
+  const cols = 2;
+  const rows = 4;
+
+  const cellW = pageW / cols;
+  const cellH = pageH / rows;
+
+  const papeletas = Array.from({ length: 8 }, () => "");
+
+  let idx = 0;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+
+      const x = c * cellW;
+      const y = r * cellH;
+
+      // TEXTO GRIS GRANDE ADAPTADO
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.setTextColor(180);
+
+      const textWidth = doc.getTextWidth(textoAnual);
+      const textX = x + (cellW - textWidth) / 2;
+      const textY = y + cellH / 2;
+
+      doc.text(textoAnual, textX, textY, { maxWidth: cellW - 6 });
+
+      idx++;
+    }
+  }
+
+  // --- líneas de corte discontinuas ---
+  doc.setDrawColor(120);
+  doc.setLineWidth(0.3);
+  doc.setLineDash([2, 2], 0);
+
+  // vertical central
+  doc.line(pageW / 2, 0, pageW / 2, pageH);
+
+  // horizontales internas (solo entre filas, no bordes)
+  for (let i = 1; i < rows; i++) {
+    const y = (pageH / rows) * i;
+    doc.line(0, y, pageW, y);
+  }
+
+  doc.save("papeletas_8_por_A4.pdf");
+}
+</script>
+
+</body>
+</html>
