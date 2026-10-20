@@ -22,13 +22,37 @@
 				<!-- Header -->
 					<header id="header">
 						<h1>JFSanchez</h1>
-						<p>Página personal &mdash; 📚 Apuntes</p>
-						<nav>
+						<p>&mdash; 📓 Apuntes &mdash; 📄 Documentación &mdash; 📚️ Presentaciones &mdash;</p>
+
+						<nav class="sections">
+							<h2>Secciones</h2>
 							<ul>
-                                <li><a target="_blank" href="https://jfsanchez.es/bigdata" class="icon solid fa-book"><span style="background-color: navy !important;" class="label"> &nbsp;BigData&nbsp; </span></a></li>
-                                <!-- <li><a target="_blank" href="https://github.com/jfsanchez" class="icon brands fa-github"><span class="label">Github</span></a></li>
-								<li><a target="_blank" href="https://jfsanchez.es/docencia/libreta/Plantilla_Hoja%20de%20firmas%20asistencia_pdf_editable.pdf" class="icon solid fa-edit"><span class="label">Firmas</span></a></li>
-								<li><a target="_blank" href="https://github.com/jfsanchez/docencia/tree/main/libreta" class="icon solid fa-folder-open"><span class="label">Otros</span></a></li> -->
+								<li>
+									<a href="https://jfsanchez.es/bigdata">
+										<span class="section-icon">
+											<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+												<path d="M6 4.8h15.6a10.4 10.4 0 0 1 10.4 10.4v36.4a7.8 7.8 0 0 0-7.8 7.8H6z"/>
+												<path d="M58 4.8H42.4a10.4 10.4 0 0 0-10.4 10.4v36.4a7.8 7.8 0 0 1 7.8 7.8h18.2z"/>
+												<circle cx="15" cy="24" r="3.6" stroke-width="2.2"/>
+												<path d="M24 19.5v9" stroke-width="2.2"/>
+												<path d="M15 35.5v9" stroke-width="2.2"/>
+												<circle cx="24" cy="40" r="3.6" stroke-width="2.2"/>
+												<ellipse cx="45" cy="21.5" rx="8.5" ry="4" stroke-width="2.2"/>
+												<path d="M36.5 21.5v22" stroke-width="2.2"/>
+												<path d="M53.5 21.5v22" stroke-width="2.2"/>
+												<path d="M36.5 32.5a8.5 4 0 0 0 17 0" stroke-width="2.2"/>
+												<path d="M36.5 43.5a8.5 4 0 0 0 17 0" stroke-width="2.2"/>
+											</svg>
+										</span>
+										<span class="section-text">
+											<span class="section-title">BigData</span>
+											<span class="section-desc">Apuntes y materiales</span>
+										</span>
+									</a>
+								</li>
+								<!-- <li><a target="_blank" rel="noopener" href="https://github.com/jfsanchez"><span class="section-text"><span class="section-title">Github</span></span></a></li>
+								<li><a target="_blank" rel="noopener" href="https://jfsanchez.es/docencia/libreta/Plantilla_Hoja%20de%20firmas%20asistencia_pdf_editable.pdf"><span class="section-text"><span class="section-title">Firmas</span></span></a></li>
+								<li><a target="_blank" rel="noopener" href="https://github.com/jfsanchez/docencia/tree/main/libreta"><span class="section-text"><span class="section-title">Otros</span></span></a></li> -->
 							</ul>
 						</nav>
 					</header>
@@ -36,15 +60,15 @@
 
 				<!-- Footer -->
 					<footer id="footer">
-						<span class="copyright">&copy; <a href="https://jfsanchez.es">JFSanchez</a> &mdash; 2015-2025. &nbsp; &nbsp; Design: <a href="http://html5up.net">HTML5 UP</a>.</span>
+						<span class="copyright">&copy; <a href="https://jfsanchez.es">JFSanchez</a> &mdash; 2015-<span id="year">2026</span></span>
+						<!--
+							Basado en HTML5 UP pero activamente modificado: http://html5up.net
+							Based on HTML5 UP but heavily modified: http://html5up.net
+						-->
 					</footer>
 
 			</div>
 		</div>
-		<script>
-			window.onload = function() { document.body.classList.remove('is-preload'); }
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
-		</script>
+		<script src="assets/js/main.js"></script>
 	</body>
 </html>
