@@ -1,39 +1,175 @@
+<!DOCTYPE HTML>
 <html lang="es">
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<title>JFSanchez &mdash; 404 No encontrado / 404 Not Found</title>
-	<link rel="icon" href="/favicon.ico">
-	   <style>
-        body{
-            background-size: cover;
-            font-family: 'sans-serif';
-        }
-        main{
-            display: flex;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .header404{
-            font-size: 48px;
-        }
-        .content404{
-            text-align: center;
-        }
-    </style>
-  </head>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<title>JFSanchez &mdash; 404 No encontrado / 404 Not Found</title>
+		<meta name="description" content="404 &mdash; La página que buscas no existe / The page you are looking for doesn't exist." />
+		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+		<style>
+			*, *:before, *:after {
+				box-sizing: border-box;
+			}
 
-  <body>
-	<main>
-        <h4 class="header404">ERROR 404</h4>
-        <div class="content-404">
-            <p>404 No encontrado / 404 Not Found</p>
-        </div>
-		<p>&copy; 2015-2026 <a href="https://jfsanchez.es">JFSanchez</a>.</p>
-    </main>
+			body {
+				background-color: #f6f8fa;
+				background-image: linear-gradient(rgba(246, 248, 250, 0.5), rgba(246, 248, 250, 0.5)), url("assets/css/images/overlay-pattern.png"), radial-gradient(circle at 50% 0%, #e7edf3, #f6f8fa 55%);
+				background-repeat: no-repeat, repeat, no-repeat;
+				color: #24292f;
+				font-family: 'Source Sans Pro', 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+				font-size: 15pt;
+				font-weight: 300;
+				letter-spacing: -0.025em;
+				line-height: 1.75em;
+				margin: 0;
+				min-height: 100vh;
+			}
 
-  </body>
+			main {
+				align-items: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				min-height: 100vh;
+				padding: 2em 1em;
+				text-align: center;
+			}
+
+			.card {
+				background-color: rgba(6, 20, 38, 0.68);
+				border: solid 1px rgba(255, 255, 255, 0.35);
+				border-radius: 0.6em;
+				box-shadow: 0 8px 30px rgba(27, 31, 36, 0.18);
+				color: #f0f3f5;
+				max-width: 34em;
+				padding: 3em 2.5em 2.5em 2.5em;
+				-webkit-backdrop-filter: blur(10px);
+				backdrop-filter: blur(10px);
+			}
+
+			.header404 {
+				color: #f0f3f5;
+				font-size: 5.5em;
+				font-weight: 900;
+				letter-spacing: -0.035em;
+				line-height: 1em;
+				margin: 0;
+				text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45), 5px 6px 12px rgba(0, 0, 0, 0.5);
+			}
+
+			.title404 {
+				font-size: 1.25em;
+				font-weight: 900;
+				letter-spacing: -0.01em;
+				line-height: 1.25em;
+				margin: 0.75em 0 0 0;
+				opacity: 0.95;
+			}
+
+			.content404 {
+				font-size: 1em;
+				margin: 0.5em 0 0 0;
+				opacity: 0.75;
+			}
+
+			.actions404 {
+				margin: 2em 0 0 0;
+			}
+
+			.btn404 {
+				align-items: center;
+				border: solid 1px rgba(255, 255, 255, 0.35);
+				border-radius: 0.6em;
+				color: inherit;
+				display: inline-flex;
+				gap: 0.6em;
+				padding: 0.6em 1.4em;
+				text-decoration: none;
+				transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+			}
+
+				.btn404:hover {
+					background-color: rgba(6, 20, 38, 0.8);
+					border-color: rgba(255, 255, 255, 0.8);
+				}
+
+				.btn404:active {
+					background-color: rgba(6, 20, 38, 0.9);
+				}
+
+				.btn404 svg {
+					display: block;
+					height: 1.2em;
+					width: 1.2em;
+				}
+
+			.copyright {
+				color: #57606a;
+				font-size: 0.9em;
+				margin: 2em 0 0 0;
+			}
+
+				.copyright a {
+					border-bottom: dotted 1px;
+					color: inherit;
+					text-decoration: none;
+				}
+
+					.copyright a:hover {
+						border-color: transparent;
+					}
+
+			@media screen and (max-width: 1680px) {
+				body {
+					font-size: 13pt;
+				}
+			}
+
+			@media screen and (max-width: 1280px) {
+				body {
+					font-size: 12pt;
+				}
+			}
+
+			@media screen and (max-width: 736px) {
+				body {
+					font-size: 11pt;
+					min-width: 320px;
+				}
+			}
+
+			@media screen and (max-width: 480px) {
+				.header404 {
+					font-size: 3.75em;
+				}
+
+				.card {
+					padding: 2em 1.5em;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="card">
+				<h1 class="header404">404</h1>
+				<h2 class="title404">Página no encontrada</h2>
+				<p class="content404">La página que buscas no existe o ha cambiado de dirección.<br />
+					The page you are looking for doesn&rsquo;t exist.</p>
+				<p class="actions404">
+					<a class="btn404" href="/">
+						<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M32 6 4 26v32h20V40h16v18h20V26L32 6z" />
+						</svg>
+						Volver al inicio
+					</a>
+				</p>
+			</div>
+			<p class="copyright">&copy; 2015-<span id="year">2026</span> <a href="https://jfsanchez.es">JFSanchez</a>.</p>
+		</main>
+
+		<script src="assets/js/main.js"></script>
+	</body>
 </html>
